@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="80dp">
+
+    <androidx.cardview.widget.CardView
+        app:cardUseCompatPadding="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我是标题"
+                android:layout_marginLeft="20dp"
+                android:textColor="@color/colorButton"
+                android:id="@+id/music_title"
+                android:textSize="18sp"/>
+            <TextView
+                android:layout_alignLeft="@id/music_title"
+                android:layout_below="@id/music_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我是作者"
+                android:layout_marginTop="5dp"
+                android:id="@+id/music_artists" />
+            <TextView
+                android:id="@+id/music_album"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我是专辑名"
+                android:layout_toRightOf="@id/music_artists"
+                android:layout_alignTop="@id/music_artists"
+                android:layout_marginLeft="5dp"/>
+            <TextView
+                android:layout_alignLeft="@id/music_artists"
+                android:layout_below="@id/music_artists"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我是备注"
+                android:id="@+id/music_alias"
+                android:layout_marginTop="2dp" />
+            <Button
+                android:id="@+id/music_mv"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/mv"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"/>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>
