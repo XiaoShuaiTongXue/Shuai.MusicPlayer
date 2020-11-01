@@ -1,5 +1,6 @@
 package com.shuai.musicplayer2.control;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -55,7 +56,10 @@ public class Main extends AppCompatActivity {
         mAdapter.setOnMusicClickListener(new MusicListAdapter.OnMusicClickListener() {
             @Override
             public void onMusicClick(String musicId) {
-                Toast.makeText(Main.this, "你选择的音乐id："+musicId, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Main.this,Player.class);
+                Log.i(TAG,musicId);
+                intent.putExtra("musicId",musicId);
+                startActivity(intent);
             }
         });
     }

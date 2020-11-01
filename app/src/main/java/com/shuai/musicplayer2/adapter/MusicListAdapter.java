@@ -94,7 +94,6 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.Inne
         }
         public void setMusicId(String musicId){
             mMusicId = musicId;
-
         }
     }
 }
