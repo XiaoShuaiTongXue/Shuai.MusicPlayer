@@ -98,7 +98,6 @@ public class Player extends AppCompatActivity {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         mPic.setImageBitmap(resource);
-                        blur(resource, findViewById(R.id.content));
                     }
                 });
         //设置旋转动画
@@ -132,43 +131,4 @@ public class Player extends AppCompatActivity {
         });
     }
 
-
-    @SuppressLint("NewApi")
-    private void blur(Bitmap bkg, View view) {
-        long startMs = System.currentTimeMillis();
-        float scaleFactor = 40;//图片缩放比例；
-        float radius = 10;//模糊程度
-
-        Bitmap overlay = Bitmap.createBitmap(
-                (int) (view.getMeasuredWidth() / scaleFactor),
-                (int) (view.getMeasuredHeight() / scaleFactor),
-                Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(overlay);
-        canvas.translate(-view.getLeft() / scaleFactor, -view.getTop()/ scaleFactor);
-        canvas.scale(1 / scaleFactor, 1 / scaleFactor);
-        Paint paint = new Paint();
-        paint.setFlags(Paint.FILTER_BITMAP_FLAG);
-        canvas.drawBitmap(bkg, 0, 0, paint);
-
-
-        overlay = FastBlur.doBlur(overlay, (int) radius, true);
-        view.setBackground(new BitmapDrawable(getResources(), overlay));
-        /**
-         * 打印高斯模糊处理时间，如果时间大约16ms，用户就能感到到卡顿，时间越长卡顿越明显，如果对模糊完图片要求不高，可是将scaleFactor设置大一些。
-         */
-        Log.i("jerome", "blur time:" + (System.currentTimeMillis() - startMs));
-    }
-
-//    /**
-//     * 获取系统状态栏和软件标题栏，部分软件没有标题栏，看自己软件的配置；
-//     * @return
-//     */
-//    private int getOtherHeight() {
-//        Rect frame = new Rect();
-//        getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
-//        int statusBarHeight = frame.top;
-//        int contentTop = getWindow().findViewById(Window.ID_ANDROID_CONTENT).getTop();
-//        int titleBarHeight = contentTop - statusBarHeight;
-//        return statusBarHeight + titleBarHeight;
-//    }
 }
