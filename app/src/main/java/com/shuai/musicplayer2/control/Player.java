@@ -98,7 +98,7 @@ public class Player extends AppCompatActivity {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         mPic.setImageBitmap(resource);
-                        blur(resource, findViewById(R.id.content));
+                        //blur(resource, findViewById(R.id.content));
                     }
                 });
         //设置旋转动画
@@ -107,7 +107,7 @@ public class Player extends AppCompatActivity {
                 .setDuration(15000);
         mRotation.setRepeatCount(Animation.INFINITE);
         mRotation.setInterpolator(new LinearInterpolator());
-        mRotation.start();
+//        mRotation.start();
     }
 
 
@@ -122,6 +122,7 @@ public class Player extends AppCompatActivity {
                 if(response.code() == HttpURLConnection.HTTP_OK){
                     mMusicInfo = response.body();
                     setUI();
+                    setBack();
                 }
             }
 
@@ -132,12 +133,41 @@ public class Player extends AppCompatActivity {
         });
     }
 
+    private void applyBlur() {
+        View view = getWindow().getDecorView();
+        view.setDrawingCacheEnabled(true);
+        view.buildDrawingCache(true);
+        /**
+         * 获取当前窗口快照，相当于截屏
+         */
+        Bitmap bmp1 = view.getDrawingCache();
+//        final Bitmap bmp1 = BitmapFactory.decodeResource(getResources(), R.drawable.bg);
+        int height = getOtherHeight();
+        /**
+         * 除去状态栏和标题栏
+         */
+        Bitmap bmp2 = Bitmap.createBitmap(bmp1, 0, height,bmp1.getWidth(), bmp1.getHeight() - height);
+        blur(bmp2, findViewById(R.id.content));
+    }
+
+    private void setBack() {
+        findViewById(R.id.content).getViewTreeObserver().addOnPreDrawListener(
+                new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+//                        blur(bmp1, findViewById(R.id.content));
+                        applyBlur();
+                        return true;
+                    }
+                });
+
+    }
 
     @SuppressLint("NewApi")
     private void blur(Bitmap bkg, View view) {
         long startMs = System.currentTimeMillis();
-        float scaleFactor = 40;//图片缩放比例；
-        float radius = 10;//模糊程度
+        float scaleFactor = 30;//图片缩放比例；
+        float radius = 20;//模糊程度
 
         Bitmap overlay = Bitmap.createBitmap(
                 (int) (view.getMeasuredWidth() / scaleFactor),
@@ -159,16 +189,17 @@ public class Player extends AppCompatActivity {
         Log.i("jerome", "blur time:" + (System.currentTimeMillis() - startMs));
     }
 
-//    /**
-//     * 获取系统状态栏和软件标题栏，部分软件没有标题栏，看自己软件的配置；
-//     * @return
-//     */
-//    private int getOtherHeight() {
-//        Rect frame = new Rect();
-//        getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
-//        int statusBarHeight = frame.top;
-//        int contentTop = getWindow().findViewById(Window.ID_ANDROID_CONTENT).getTop();
-//        int titleBarHeight = contentTop - statusBarHeight;
-//        return statusBarHeight + titleBarHeight;
-//    }
+    /**
+     * 获取系统状态栏和软件标题栏，部分软件没有标题栏，看自己软件的配置；
+     * @return
+     */
+    private int getOtherHeight() {
+        Rect frame = new Rect();
+        getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
+        int statusBarHeight = frame.top;
+        int contentTop = getWindow().findViewById(Window.ID_ANDROID_CONTENT).getTop();
+        int titleBarHeight = contentTop - statusBarHeight;
+        return statusBarHeight + titleBarHeight;
+    }
+
 }
