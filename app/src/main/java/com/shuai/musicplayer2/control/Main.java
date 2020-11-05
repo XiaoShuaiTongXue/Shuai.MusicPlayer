@@ -17,6 +17,7 @@ import com.shuai.musicplayer2.R;
 import com.shuai.musicplayer2.adapter.MusicListAdapter;
 import com.shuai.musicplayer2.api.Api;
 import com.shuai.musicplayer2.domain.MusicList;
+import com.shuai.musicplayer2.domain.MusicUrl;
 import com.shuai.musicplayer2.utils.RetrofitManager;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -34,7 +35,9 @@ public class Main extends AppCompatActivity {
     private Retrofit mRetrofit;
     private Api mApi;
     private static final String TAG = "Main";
+    private Call<MusicUrl> mUrlTask;
     private MusicListAdapter mAdapter;
+    private String mUrl;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,10 +62,37 @@ public class Main extends AppCompatActivity {
                 Intent intent = new Intent(Main.this,Player.class);
                 Log.i(TAG,musicId);
                 intent.putExtra("musicId",musicId);
-                startActivity(intent);
+                getUrl(musicId);
+                if (mUrl!=null){
+                    intent.putExtra("url",mUrl);
+                    startActivity(intent);
+                }
             }
         });
     }
+
+    /**
+     * 根据Id获取音乐播放Url
+     * @return 音乐播放的Url
+     */
+    private void getUrl(String mMusicId) {
+        mUrlTask = mApi.getMusicUrl(mMusicId);
+        mUrlTask.enqueue(new Callback<MusicUrl>() {
+            @Override
+            public void onResponse(Call<MusicUrl> call, Response<MusicUrl> response) {
+                if(response.code()==HttpsURLConnection.HTTP_OK){
+                    mUrl = response.body().getData().get(0).getUrl();
+                    Log.i(TAG, mUrl);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MusicUrl> call, Throwable t) {
+                Log.i(TAG,t.toString());
+            }
+        });
+    }
+
     public void search(View view) {
         String mKeyWord = mEditText.getText().toString();
         if (mKeyWord!=null){
