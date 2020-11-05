@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,15 +11,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.shuai.musicplayer2.R;
 import com.shuai.musicplayer2.domain.MusicList;
+import com.shuai.musicplayer2.domain.MusicListInfo;
+import com.shuai.musicplayer2.utils.GetMusicListInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.InnerHolder>{
 
-    List<MusicList.ResultBean.SongsBean> mSongsBeans = new ArrayList<>();
+    List<MusicListInfo> mMusicListInfo = new ArrayList<MusicListInfo>();
     private  View mItemView;
     private OnMusicClickListener mMusicClickListener;
+
 
     @NonNull
     @Override
@@ -36,25 +38,25 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.Inne
         TextView tv_album = mItemView.findViewById(R.id.music_album);
         TextView tv_artists = mItemView.findViewById(R.id.music_artists);
         Button btn_mv = mItemView.findViewById(R.id.music_mv);
-        MusicList.ResultBean.SongsBean songsBean = mSongsBeans.get(position);
-        tv_title.setText(songsBean.getName());
+        MusicListInfo musicListInfo = mMusicListInfo.get(position);
+        tv_title.setText(musicListInfo.getName());
         String mArtist = "";
         //处理多个作者
-        for (MusicList.ResultBean.SongsBean.ArtistsBean artist: songsBean.getArtists()) {
+        for (MusicList.ResultBean.SongsBean.ArtistsBean artist: musicListInfo.getArtistsName()) {
             mArtist += artist.getName();
         }
         tv_artists.setText(mArtist);
-        tv_album.setText("-"+songsBean.getAlbum().getName());
+        tv_album.setText("-"+musicListInfo.getAlbumName());
         //处理多个备注
         String mAlias = "";
-        for (String alias: songsBean.getAlias()) {
+        for (String alias: musicListInfo.getAlia()) {
             mAlias += alias;
         }
         tv_alias.setText(mAlias);
-        if (songsBean.getMvid()==0){
+        if (musicListInfo.getMvid()==0){
             btn_mv.setVisibility(View.GONE);
         }
-        holder.setMusicId(songsBean.getId()+"");
+        holder.setPosition(position);
     }
 
     //设置点击事件
@@ -64,22 +66,27 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.Inne
     }
 
     public interface OnMusicClickListener{
-        void onMusicClick(String musicId);
+        void onMusicClick(int position);
     }
     @Override
     public int getItemCount() {
-        return 10;
+        return GetMusicListInfo.count;
     }
 
-    public void setData(MusicList body) {
-        mSongsBeans.clear();
-        mSongsBeans.addAll(body.getResult().getSongs());
+    /**
+     * 设置数据
+     */
+    public void setData() {
+        mMusicListInfo.clear();
+        mMusicListInfo.addAll(GetMusicListInfo.sMusicListInfo);
         notifyDataSetChanged();
     }
 
 
     public class InnerHolder extends RecyclerView.ViewHolder {
         private String mMusicId;
+        private int mPosition;
+
         public InnerHolder(@NonNull View itemView) {
             super(itemView);
             mItemView = itemView;
@@ -87,13 +94,13 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.Inne
                 @Override
                 public void onClick(View v) {
                     if(mMusicClickListener != null){
-                        mMusicClickListener.onMusicClick(mMusicId);
+                        mMusicClickListener.onMusicClick(mPosition);
                     }
                 }
             });
         }
-        public void setMusicId(String musicId){
-            mMusicId = musicId;
+        public void setPosition(int position){
+            mPosition = position;
         }
     }
 }

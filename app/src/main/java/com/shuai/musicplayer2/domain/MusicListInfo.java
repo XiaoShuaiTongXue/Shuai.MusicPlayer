@@ -4,15 +4,37 @@ import java.util.List;
 
 public class MusicListInfo {
 
-    public void setMusicListInfo(MusicInfo.SongsBean songsBean){
+    @Override
+    public String toString() {
+        return "MusicListInfo{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", mvid=" + mvid +
+                ", fee=" + fee +
+                ", albumName='" + albumName + '\'' +
+                ", artistsName=" + artistsName +
+                ", picUrl='" + picUrl + '\'' +
+                ", url='" + url + '\'' +
+                ", alia=" + alia +
+                '}';
+    }
+
+    public void setMusicInfo(MusicList.ResultBean.SongsBean songsBean){
         this.id = songsBean.getId();
         this.name = songsBean.getName();
-        this.mvid = songsBean.getMv();
+        this.mvid = songsBean.getMvid();
         this.fee = songsBean.getFee();
-        this.albumName = songsBean.getAl().getName();
-        this.artistsName = songsBean.getAr().get(0).getName();
-        this.picUrl = songsBean.getAl().getPicUrl();
-        this.alia = songsBean.getAlia();
+        this.albumName = songsBean.getAlbum().getName();
+        this.artistsName = songsBean.getArtists();
+        this.alia = songsBean.getAlias();
+    }
+
+    public void setPicUrl(String picUrl){
+        this.picUrl = picUrl;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     //音乐ID
@@ -26,7 +48,16 @@ public class MusicListInfo {
     //专辑名
     private String albumName;
     //作家名
-    private String artistsName;
+    private List<MusicList.ResultBean.SongsBean.ArtistsBean> artistsName;
+
+    public String getAlbumName() {
+        return albumName;
+    }
+
+    public List<MusicList.ResultBean.SongsBean.ArtistsBean> getArtistsName() {
+        return artistsName;
+    }
+
     //音乐图片地址
     private String picUrl;
     //音乐播放地址
@@ -54,21 +85,11 @@ public class MusicListInfo {
         return fee;
     }
 
-    public String getalbumName() {
-        return albumName;
-    }
-
-    public String getartistsName() {
-        return artistsName;
-    }
 
     public String getPicUrl() {
         return picUrl;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
 
     public String getUrl() {
         return url;

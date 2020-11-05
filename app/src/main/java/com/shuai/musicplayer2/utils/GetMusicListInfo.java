@@ -1,8 +1,10 @@
 package com.shuai.musicplayer2.utils;
 
+import android.os.Message;
 import android.util.Log;
 
 import com.shuai.musicplayer2.api.Api;
+import com.shuai.musicplayer2.control.Main;
 import com.shuai.musicplayer2.domain.MusicInfo;
 import com.shuai.musicplayer2.domain.MusicList;
 import com.shuai.musicplayer2.domain.MusicListInfo;
@@ -34,6 +36,7 @@ public class GetMusicListInfo {
     //根据关键词获得十条音乐信息
     public GetMusicListInfo(String keyWord){
         if (!(mKeyword!=null&&mKeyword == keyWord)){
+            count = 10;
             sMusicListInfo = new ArrayList<MusicListInfo>();
             mRetrofit = RetrofitManager.getRetrofit();
             mApi = mRetrofit.create(Api.class);
@@ -46,6 +49,9 @@ public class GetMusicListInfo {
                         mSongs = mMusicList.getResult().getSongs();
                         //根据列表的信息更新每一条信息的地址
                         updateInfo();
+                        Message message = Message.obtain();
+                        message.what = 100;
+                        Main.mHandler.sendMessage(message);
                     }
                 }
 
@@ -64,16 +70,16 @@ public class GetMusicListInfo {
     //更新每个列表的pic地址和Url地址
     private void updateInfo() {
         for (int i = 0; i < count ; i++) {
-           String musicId = Integer.toString(mSongs.get(0).getId()) ;
-           MusicListInfo mMusicListInfo = new MusicListInfo();
-           mMusicInfoTask = mApi.getMusicInfo(musicId);
-           mMusicInfoTask.enqueue(new Callback<MusicInfo>() {
-
-
+            MusicListInfo mMusicListInfo = new MusicListInfo();
+            MusicList.ResultBean.SongsBean songsBean = mSongs.get(i);
+            String musicId = Integer.toString(songsBean.getId());
+            mMusicListInfo.setMusicInfo(songsBean);
+            mMusicInfoTask = mApi.getMusicInfo(musicId);
+            mMusicInfoTask.enqueue(new Callback<MusicInfo>() {
                @Override
                public void onResponse(Call<MusicInfo> call, Response<MusicInfo> response) {
                    if (response.code() == HttpURLConnection.HTTP_OK){
-                       mMusicListInfo.setMusicListInfo(response.body().getSongs().get(0));
+                       mMusicListInfo.setPicUrl(response.body().getSongs().get(0).getAl().getPicUrl());
                    }
                }
 
@@ -81,9 +87,9 @@ public class GetMusicListInfo {
                public void onFailure(Call<MusicInfo> call, Throwable t) {
                    Log.i(TAG,t.toString());
                }
-           });
-           mMusicUrlTask = mApi.getMusicUrl(musicId);
-           mMusicUrlTask.enqueue(new Callback<MusicUrl>() {
+            });
+            mMusicUrlTask = mApi.getMusicUrl(musicId);
+            mMusicUrlTask.enqueue(new Callback<MusicUrl>() {
                @Override
                public void onResponse(Call<MusicUrl> call, Response<MusicUrl> response) {
                    if (response.code() == HttpURLConnection.HTTP_OK){
@@ -95,8 +101,8 @@ public class GetMusicListInfo {
                public void onFailure(Call<MusicUrl> call, Throwable t) {
                    Log.i(TAG,t.toString());
                }
-           });
-           sMusicListInfo.add(mMusicListInfo);
+            });
+            sMusicListInfo.add(mMusicListInfo);
         }
     }
 }

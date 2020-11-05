@@ -20,8 +20,6 @@ public class PlayerPresenter extends Binder implements IPlayerController {
     private MediaPlayer mPlayer;
     private Timer mTimer;
     private SeekTimeTask mTimeTask;
-    private static String mUrl;
-
 
     @Override
     public void registerIPlayViewController(IPlayerViewController iPlayerViewController) {
@@ -34,19 +32,14 @@ public class PlayerPresenter extends Binder implements IPlayerController {
     }
 
     @Override
-    public void start(String url) {
-        Log.i(TAG,"->start");
-        if (mUrl!=null&&mUrl.equals(url)){
-            Log.i(TAG,"两个相同");
-            return;
-        }
-        mUrl = url;
-        if (mCurrentState != PLAY_STATE_STOP){
-            mPlayer.stop();
+    public void start(String url) { ;
+        if (mPlayer!=null){
+            stop();
         }
         initMediaPlayer();
         try {
-            mPlayer.setDataSource(mUrl);
+            Log.i(TAG,url);
+            mPlayer.setDataSource(url);
             mPlayer.prepare();
             mPlayer.start();
             mCurrentState = PLAY_STATE_START;
@@ -86,6 +79,9 @@ public class PlayerPresenter extends Binder implements IPlayerController {
     }
 
 
+    /**
+     * 停止播放
+     */
     @Override
     public void stop() {
         Log.i(TAG,"停止播放");
@@ -98,6 +94,7 @@ public class PlayerPresenter extends Binder implements IPlayerController {
             stopTimeTask();
             mPlayer.release();
             mPlayer = null;
+            mViewController.onSeekChange(0);
         }
     }
 
