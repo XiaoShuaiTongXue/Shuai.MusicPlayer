@@ -20,6 +20,7 @@ public class PlayerPresenter extends Binder implements IPlayerController {
     private MediaPlayer mPlayer;
     private Timer mTimer;
     private SeekTimeTask mTimeTask;
+    private static String mUrl;
 
 
     @Override
@@ -35,18 +36,24 @@ public class PlayerPresenter extends Binder implements IPlayerController {
     @Override
     public void start(String url) {
         Log.i(TAG,"->start");
-        if (mCurrentState == PLAY_STATE_STOP){
-            initMediaPlayer();
-            try {
-                mPlayer.setDataSource(url);
-                mPlayer.prepare();
-                mPlayer.start();
-                mCurrentState = PLAY_STATE_START;
-                startTimeTask();
-            } catch (IOException e) {
-                Log.i(TAG,"error:"+e.toString());
-                e.printStackTrace();
-            }
+        if (mUrl!=null&&mUrl.equals(url)){
+            Log.i(TAG,"两个相同");
+            return;
+        }
+        mUrl = url;
+        if (mCurrentState != PLAY_STATE_STOP){
+            mPlayer.stop();
+        }
+        initMediaPlayer();
+        try {
+            mPlayer.setDataSource(mUrl);
+            mPlayer.prepare();
+            mPlayer.start();
+            mCurrentState = PLAY_STATE_START;
+            startTimeTask();
+        } catch (IOException e) {
+            Log.i(TAG,"error:"+e.toString());
+            e.printStackTrace();
         }
     }
 
@@ -71,8 +78,11 @@ public class PlayerPresenter extends Binder implements IPlayerController {
      * 初始化播放器
      */
     private void initMediaPlayer() {
-        mPlayer = new MediaPlayer();
-        mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        if (mPlayer == null) {
+            mPlayer = new MediaPlayer();
+            mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        }
+        mViewController.onSeekChange(0);
     }
 
 

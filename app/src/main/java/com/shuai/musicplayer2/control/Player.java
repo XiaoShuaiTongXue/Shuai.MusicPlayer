@@ -77,7 +77,7 @@ public class Player extends AppCompatActivity {
     private boolean isTouch = false;
     private SeekBar mSeek;
     private Button mSp;
-    private String mUrl;
+    private static String mUrl;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
