@@ -12,7 +12,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.shuai.musicplayer2.R;
@@ -27,37 +26,18 @@ public class Main extends AppCompatActivity {
     private static final String TAG = "Main";
     private MusicListAdapter mAdapter;
     public static Handler mHandler;
+    private String mKeyWord;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        InitView();
-    }
-
-    private void InitView() {
         mEditText = findViewById(R.id.keywords);
-        mRv = findViewById(R.id.rv);
-        mAdapter = new MusicListAdapter();
-
     }
-
-    public void initListener(){
-        mAdapter.setOnMusicClickListener(new MusicListAdapter.OnMusicClickListener() {
-            @Override
-            public void onMusicClick(int position) {
-                Intent intent = new Intent(Main.this,Player.class);
-                intent.putExtra("position",position);
-                startActivity(intent);
-            }
-        });
-    }
-
-
 
     public void search(View view) {
-        String mKeyWord = mEditText.getText().toString();
-        if(mKeyWord==null||mKeyWord.equals("")){
+        mKeyWord = mEditText.getText().toString();
+        if(mKeyWord ==null|| mKeyWord.equals("")){
             Toast.makeText(this, "请输入搜索关键词", Toast.LENGTH_SHORT).show();
         }
         new  GetMusicListInfo(mKeyWord);
@@ -66,20 +46,18 @@ public class Main extends AppCompatActivity {
             public void handleMessage(@NonNull Message msg) {
                 if (msg.what==100){
                     /**
-                     * 数据加载完毕开始更新UI
+                     * 数据加载完毕，页面跳转到Result返回搜索结果
                      */
-                    Log.i(TAG,GetMusicListInfo.sMusicListInfo.toString());
-                    update();
+                    goResult();
                 }
             }
         };
     }
 
-    private void update() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mAdapter.setData();
-        mRv.setAdapter(mAdapter);
-        mRv.setLayoutManager(layoutManager);
-        initListener();
+    private void goResult() {
+        Intent intent = new Intent(Main.this,Result.class);
+        intent.putExtra("Tag","搜索：");
+        intent.putExtra("keyword",mKeyWord);
+        startActivity(intent);
     }
 }

@@ -2,23 +2,35 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="80dp">
+    android:layout_height="220dp"
+    android:layout_marginTop="20dp">
 
     <androidx.cardview.widget.CardView
         app:cardUseCompatPadding="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:cardBackgroundColor="#ACACAC"
+        app:cardCornerRadius="15dp">
         <RelativeLayout
             android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            <ImageView
+                android:layout_marginLeft="20dp"
+                android:id="@+id/music_pic"
+                android:layout_centerVertical="true"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/none"/>
             <TextView
+                android:id="@+id/music_title"
+                android:layout_marginLeft="20dp"
+                android:layout_alignTop="@id/music_pic"
+                android:layout_toRightOf="@id/music_pic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="我是标题"
-                android:layout_marginLeft="20dp"
                 android:textColor="@color/colorButton"
-                android:id="@+id/music_title"
                 android:textSize="18sp"/>
             <TextView
                 android:layout_alignLeft="@id/music_title"
@@ -37,12 +49,12 @@
                 android:layout_alignTop="@id/music_artists"
                 android:layout_marginLeft="5dp"/>
             <TextView
+                android:id="@+id/music_alias"
                 android:layout_alignLeft="@id/music_artists"
                 android:layout_below="@id/music_artists"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="我是备注"
-                android:id="@+id/music_alias"
                 android:layout_marginTop="2dp" />
             <Button
                 android:id="@+id/music_mv"

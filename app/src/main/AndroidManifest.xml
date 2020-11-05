@@ -21,6 +21,7 @@
         </activity>
         <service android:name=".service.PlayService"/>
         <activity android:name=".control.Player"/>
+        <activity android:name=".control.Result"/>
     </application>
 
 </manifest>

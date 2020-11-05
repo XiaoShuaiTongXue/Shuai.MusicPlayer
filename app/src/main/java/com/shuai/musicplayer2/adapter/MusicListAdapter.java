@@ -1,14 +1,17 @@
 package com.shuai.musicplayer2.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.shuai.musicplayer2.R;
 import com.shuai.musicplayer2.domain.MusicList;
 import com.shuai.musicplayer2.domain.MusicListInfo;
@@ -22,11 +25,15 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.Inne
     List<MusicListInfo> mMusicListInfo = new ArrayList<MusicListInfo>();
     private  View mItemView;
     private OnMusicClickListener mMusicClickListener;
+    private Context mContext;
 
 
     @NonNull
     @Override
     public InnerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (mContext == null) {
+            mContext = parent.getContext().getApplicationContext();
+        }
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_muiclist, null);
         return new InnerHolder(view);
     }
@@ -38,6 +45,7 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.Inne
         TextView tv_album = mItemView.findViewById(R.id.music_album);
         TextView tv_artists = mItemView.findViewById(R.id.music_artists);
         Button btn_mv = mItemView.findViewById(R.id.music_mv);
+        ImageView iv_pic = mItemView.findViewById(R.id.music_pic);
         MusicListInfo musicListInfo = mMusicListInfo.get(position);
         tv_title.setText(musicListInfo.getName());
         String mArtist = "";
@@ -56,8 +64,13 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.Inne
         if (musicListInfo.getMvid()==0){
             btn_mv.setVisibility(View.GONE);
         }
+        Glide.with(mContext)
+                .load(musicListInfo.getPicUrl())
+                .thumbnail(0.1f)
+                .into(iv_pic);
         holder.setPosition(position);
     }
+
 
     //设置点击事件
 
