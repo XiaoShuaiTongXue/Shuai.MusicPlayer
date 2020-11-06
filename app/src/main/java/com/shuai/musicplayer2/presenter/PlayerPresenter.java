@@ -44,6 +44,7 @@ public class PlayerPresenter extends Binder implements IPlayerController {
             mPlayer.start();
             mCurrentState = PLAY_STATE_START;
             startTimeTask();
+            mViewController.onPlayStateChange(mCurrentState);
         } catch (IOException e) {
             Log.i(TAG,"error:"+e.toString());
             e.printStackTrace();
@@ -65,6 +66,7 @@ public class PlayerPresenter extends Binder implements IPlayerController {
                 startTimeTask();
             }
         }
+        mViewController.onPlayStateChange(mCurrentState);
     }
 
     /**

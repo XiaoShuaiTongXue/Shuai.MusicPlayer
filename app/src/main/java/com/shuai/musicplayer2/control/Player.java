@@ -104,7 +104,6 @@ public class Player extends AppCompatActivity {
                 .setDuration(15000);
         mRotation.setRepeatCount(Animation.INFINITE);
         mRotation.setInterpolator(new LinearInterpolator());
-        mRotation.start();
     }
 
 
@@ -142,6 +141,7 @@ public class Player extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (mController != null) {
+                    mController.pauseOrResume();
                 }
             }
         });
@@ -191,9 +191,12 @@ public class Player extends AppCompatActivity {
         public void onPlayStateChange(int state) {
             switch (state){
                 case PLAY_STATE_START:
-                    //设置播放
+                    mRotation.resume();
+                    mSp.setBackgroundResource(R.drawable.pause);
                     break;
                 case PLAY_STATE_PAUSE:
+                    mRotation.pause();
+                    mSp.setBackgroundResource(R.drawable.start);
                     //设置暂停
                 case PLAY_STATE_STOP:
                     break;

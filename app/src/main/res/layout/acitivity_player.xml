@@ -107,7 +107,7 @@
             android:layout_centerHorizontal="true"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/pause"/>
+            android:background="@drawable/start"/>
         <Button
             android:gravity="center"
             android:layout_alignParentRight="true"
