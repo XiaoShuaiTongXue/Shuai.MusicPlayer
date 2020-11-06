@@ -19,19 +19,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.shuai.musicplayer2.R;
-import com.shuai.musicplayer2.api.Api;
-import com.shuai.musicplayer2.domain.MusicInfo;
 import com.shuai.musicplayer2.domain.MusicList;
-import com.shuai.musicplayer2.domain.MusicListInfo;
-import com.shuai.musicplayer2.domain.MusicUrl;
 import com.shuai.musicplayer2.interfaces.IPlayerController;
 import com.shuai.musicplayer2.interfaces.IPlayerViewController;
 import com.shuai.musicplayer2.service.PlayService;
-import com.shuai.musicplayer2.utils.GetMusicListInfo;
+import com.shuai.musicplayer2.utils.GetMenuList;
 
-
-import retrofit2.Call;
-import retrofit2.Retrofit;
 
 import static com.shuai.musicplayer2.interfaces.IPlayerController.PLAY_STATE_PAUSE;
 import static com.shuai.musicplayer2.interfaces.IPlayerController.PLAY_STATE_START;
@@ -48,8 +41,8 @@ public class Player extends AppCompatActivity {
     private SeekBar mSeek;
     private Button mSp;
     private static int mPosition;
-    private static int mMusicId;;
-    private MusicListInfo mMusicInfo;
+    private static String mMusicId;;
+    private com.shuai.musicplayer2.domain.MusicListInfo mMusicInfo;
     private boolean isLike = false;
 
     @Override
@@ -72,13 +65,13 @@ public class Player extends AppCompatActivity {
          */
         Intent intent = getIntent();
         int newPosition = intent.getIntExtra("position",-1);
-        int newMusicId = GetMusicListInfo.sMusicListInfo.get(newPosition).getId();
-        if (mMusicId==newMusicId){
+        String newMusicId = GetMenuList.sMusicListInfo.get(newPosition).getId();
+        if (mMusicId!=null&&mMusicId.equals(newMusicId)){
             isLike = true;
         }
         mPosition = newPosition;
         mMusicId = newMusicId;
-        mMusicInfo = GetMusicListInfo.sMusicListInfo.get(mPosition);
+        mMusicInfo = GetMenuList.sMusicListInfo.get(mPosition);
         TextView title= findViewById(R.id.player_title);
         title.setText(mMusicInfo.getName());
         TextView artists= findViewById(R.id.player_artists);

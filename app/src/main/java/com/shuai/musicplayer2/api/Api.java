@@ -4,6 +4,7 @@ package com.shuai.musicplayer2.api;
 import com.shuai.musicplayer2.domain.MusicInfo;
 import com.shuai.musicplayer2.domain.MusicList;
 import com.shuai.musicplayer2.domain.MusicUrl;
+import com.shuai.musicplayer2.domain.TopList;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -18,4 +19,7 @@ public interface Api {
 
     @GET("/song/url")
     Call<MusicUrl> getMusicUrl(@Query("id") String id);
+
+    @GET("/toplist")
+    Call<TopList> getTopList();
 }

@@ -14,15 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.shuai.musicplayer2.R;
 import com.shuai.musicplayer2.domain.MusicList;
-import com.shuai.musicplayer2.domain.MusicListInfo;
-import com.shuai.musicplayer2.utils.GetMusicListInfo;
+import com.shuai.musicplayer2.utils.GetMenuList;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.InnerHolder>{
 
-    List<MusicListInfo> mMusicListInfo = new ArrayList<MusicListInfo>();
+    List<com.shuai.musicplayer2.domain.MusicListInfo> mMusicListInfo = new ArrayList<com.shuai.musicplayer2.domain.MusicListInfo>();
     private  View mItemView;
     private OnMusicClickListener mMusicClickListener;
     private Context mContext;
@@ -46,7 +45,7 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.Inne
         TextView tv_artists = mItemView.findViewById(R.id.music_artists);
         Button btn_mv = mItemView.findViewById(R.id.music_mv);
         ImageView iv_pic = mItemView.findViewById(R.id.music_pic);
-        MusicListInfo musicListInfo = mMusicListInfo.get(position);
+        com.shuai.musicplayer2.domain.MusicListInfo musicListInfo = mMusicListInfo.get(position);
         tv_title.setText(musicListInfo.getName());
         String mArtist = "";
         //处理多个作者
@@ -83,7 +82,7 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.Inne
     }
     @Override
     public int getItemCount() {
-        return GetMusicListInfo.count;
+        return GetMenuList.count;
     }
 
     /**
@@ -91,13 +90,12 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.Inne
      */
     public void setData() {
         mMusicListInfo.clear();
-        mMusicListInfo.addAll(GetMusicListInfo.sMusicListInfo);
+        mMusicListInfo.addAll(GetMenuList.sMusicListInfo);
         notifyDataSetChanged();
     }
 
 
     public class InnerHolder extends RecyclerView.ViewHolder {
-        private String mMusicId;
         private int mPosition;
 
         public InnerHolder(@NonNull View itemView) {

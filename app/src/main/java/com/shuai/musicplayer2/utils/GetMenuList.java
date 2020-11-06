@@ -19,9 +19,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class GetMusicListInfo {
+public class GetMenuList {
 
-    public static List<MusicListInfo> sMusicListInfo;
+    public static List<com.shuai.musicplayer2.domain.MusicListInfo> sMusicListInfo;
     public static int count;
     private final Retrofit mRetrofit;
     private final Api mApi;
@@ -34,10 +34,10 @@ public class GetMusicListInfo {
     private static String mKeyword;
 
     //根据关键词获得十条音乐信息
-    public GetMusicListInfo(String keyWord){
+    public GetMenuList(String keyWord){
         if (!(mKeyword!=null&&mKeyword == keyWord)){
             count = 10;
-            sMusicListInfo = new ArrayList<MusicListInfo>();
+            sMusicListInfo = new ArrayList<com.shuai.musicplayer2.domain.MusicListInfo>();
             mRetrofit = RetrofitManager.getRetrofit();
             mApi = mRetrofit.create(Api.class);
             mMusicListTask = mApi.getMusicList(keyWord);
@@ -70,7 +70,7 @@ public class GetMusicListInfo {
     //更新每个列表的pic地址和Url地址
     private void updateInfo() {
         for (int i = 0; i < count ; i++) {
-            MusicListInfo mMusicListInfo = new MusicListInfo();
+            com.shuai.musicplayer2.domain.MusicListInfo mMusicListInfo = new com.shuai.musicplayer2.domain.MusicListInfo();
             MusicList.ResultBean.SongsBean songsBean = mSongs.get(i);
             String musicId = Integer.toString(songsBean.getId());
             mMusicListInfo.setMusicInfo(songsBean);

@@ -9,7 +9,7 @@
         app:cardUseCompatPadding="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardBackgroundColor="#ACACAC"
+        app:cardBackgroundColor="@color/teal_200"
         app:cardCornerRadius="15dp">
         <RelativeLayout
             android:layout_gravity="center"

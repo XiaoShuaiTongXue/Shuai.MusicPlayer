@@ -20,7 +20,7 @@ public class MusicListInfo {
     }
 
     public void setMusicInfo(MusicList.ResultBean.SongsBean songsBean){
-        this.id = songsBean.getId();
+        this.id = Integer.toString(songsBean.getId());
         this.name = songsBean.getName();
         this.mvid = songsBean.getMvid();
         this.fee = songsBean.getFee();
@@ -38,7 +38,7 @@ public class MusicListInfo {
     }
 
     //音乐ID
-    private int id;
+    private String id;
     //音乐名
     private String name;
     //mvID
@@ -69,7 +69,7 @@ public class MusicListInfo {
         return alia;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
