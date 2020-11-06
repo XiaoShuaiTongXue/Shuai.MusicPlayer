@@ -28,16 +28,18 @@ public class GetMenuList {
     private final Call<MusicList> mMusicListTask;
     private MusicList mMusicList;
     private static final String TAG = "GetMusicListInfo";
-    private List<MusicList.ResultBean.SongsBean> mSongs;
     private Call<MusicInfo> mMusicInfoTask;
     private Call<MusicUrl> mMusicUrlTask;
     private static String mKeyword;
+    private List<String> mSongsId;
 
-    //根据关键词获得十条音乐信息
+    /**
+     * 根据关键词获得音乐列表，并将ID信息存放到数组中
+     * @param keyWord 关键词
+     */
     public GetMenuList(String keyWord){
         if (!(mKeyword!=null&&mKeyword == keyWord)){
             count = 10;
-            sMusicListInfo = new ArrayList<com.shuai.musicplayer2.domain.MusicListInfo>();
             mRetrofit = RetrofitManager.getRetrofit();
             mApi = mRetrofit.create(Api.class);
             mMusicListTask = mApi.getMusicList(keyWord);
@@ -46,7 +48,9 @@ public class GetMenuList {
                 public void onResponse(Call<MusicList> call, Response<MusicList> response) {
                     if(response.code()== HttpURLConnection.HTTP_OK){
                         mMusicList = response.body();
-                        mSongs = mMusicList.getResult().getSongs();
+                        List<MusicList.ResultBean.SongsBean> songs = mMusicList.getResult().getSongs();
+                        //将取出的id存放到列表中，将具体信息查询独立出来，方便本地数据库的查询
+                        saveInList(songs);
                         //根据列表的信息更新每一条信息的地址
                         updateInfo();
                         Message message = Message.obtain();
@@ -67,19 +71,37 @@ public class GetMenuList {
         }
     }
 
-    //更新每个列表的pic地址和Url地址
+    private void saveInList(List<MusicList.ResultBean.SongsBean> songs) {
+        //将存放数据的数组清空，防止内存泄露
+        if (mSongsId != null){
+            mSongsId.clear();
+            mSongsId = null;
+        }
+        mSongsId = new ArrayList<String>();
+        for (MusicList.ResultBean.SongsBean song : songs){
+            mSongsId.add(Integer.toString(song.getId()));
+        }
+    }
+
+    /**
+     * 更新每个列表的pic地址和Url地址
+     * 执行此方法必须声明count的值
+     */
     private void updateInfo() {
+        if (sMusicListInfo != null) {
+            sMusicListInfo.clear();
+            sMusicListInfo = null;
+        }
+        sMusicListInfo = new ArrayList<com.shuai.musicplayer2.domain.MusicListInfo>();
         for (int i = 0; i < count ; i++) {
             com.shuai.musicplayer2.domain.MusicListInfo mMusicListInfo = new com.shuai.musicplayer2.domain.MusicListInfo();
-            MusicList.ResultBean.SongsBean songsBean = mSongs.get(i);
-            String musicId = Integer.toString(songsBean.getId());
-            mMusicListInfo.setMusicInfo(songsBean);
+            String musicId = mSongsId.get(i);
             mMusicInfoTask = mApi.getMusicInfo(musicId);
             mMusicInfoTask.enqueue(new Callback<MusicInfo>() {
                @Override
                public void onResponse(Call<MusicInfo> call, Response<MusicInfo> response) {
                    if (response.code() == HttpURLConnection.HTTP_OK){
-                       mMusicListInfo.setPicUrl(response.body().getSongs().get(0).getAl().getPicUrl());
+                       mMusicListInfo.setMusicInfo(response.body().getSongs().get(0));
                    }
                }
 

@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.shuai.musicplayer2.R;
+import com.shuai.musicplayer2.domain.MusicInfo;
 import com.shuai.musicplayer2.domain.MusicList;
 import com.shuai.musicplayer2.interfaces.IPlayerController;
 import com.shuai.musicplayer2.interfaces.IPlayerViewController;
@@ -72,25 +73,9 @@ public class Player extends AppCompatActivity {
         mPosition = newPosition;
         mMusicId = newMusicId;
         mMusicInfo = GetMenuList.sMusicListInfo.get(mPosition);
-        TextView title= findViewById(R.id.player_title);
-        title.setText(mMusicInfo.getName());
-        TextView artists= findViewById(R.id.player_artists);
-        String mArtists = "";
-        //处理多个作者
-        for (MusicList.ResultBean.SongsBean.ArtistsBean artist: mMusicInfo.getArtistsName()) {
-            mArtists += artist.getName();
-        }
-        artists.setText(mArtists);
-        //处理多个标注
-        TextView alis= findViewById(R.id.player_alis);
-        String alisStr = "";
-        for (String ali : mMusicInfo.getAlia()){
-            alisStr += ali;
-        }
-        if(!alisStr.equals("")){
-            alisStr = "("+alisStr+")";
-        }
-        alis.setText(alisStr);
+        ((TextView)findViewById(R.id.player_title)).setText(mMusicInfo.getName());
+        ((TextView)findViewById(R.id.player_alis)).setText(mMusicInfo.getAlia());
+        ((TextView)findViewById(R.id.player_artists)).setText(mMusicInfo.getArtistsName());
         Button mv = findViewById(R.id.player_mv);
         if (mMusicInfo.getMvid()==0){
             mv.setVisibility(View.GONE);

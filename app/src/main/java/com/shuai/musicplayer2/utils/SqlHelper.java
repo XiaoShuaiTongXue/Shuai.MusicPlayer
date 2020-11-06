@@ -6,14 +6,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-public class mySqlHelper extends SQLiteOpenHelper {
-    public mySqlHelper(@Nullable Context context) {
+public class SqlHelper extends SQLiteOpenHelper {
+    public SqlHelper(@Nullable Context context) {
         super(context, "select.db", null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table info(_id integer primary key autoincrement,app_id integer)");
+        db.execSQL("create table like_info(_id integer primary key autoincrement,like_id varchar(20) not null)");
     }
 
     @Override

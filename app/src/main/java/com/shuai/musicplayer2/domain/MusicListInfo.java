@@ -19,19 +19,23 @@ public class MusicListInfo {
                 '}';
     }
 
-    public void setMusicInfo(MusicList.ResultBean.SongsBean songsBean){
+    public void setMusicInfo(MusicInfo.SongsBean songsBean){
         this.id = Integer.toString(songsBean.getId());
         this.name = songsBean.getName();
-        this.mvid = songsBean.getMvid();
+        this.mvid = songsBean.getMv();
         this.fee = songsBean.getFee();
-        this.albumName = songsBean.getAlbum().getName();
-        this.artistsName = songsBean.getArtists();
-        this.alia = songsBean.getAlias();
+        this.albumName = songsBean.getAl().getName();
+        this.artistsName = "";
+        for (MusicInfo.SongsBean.ArBean arBean : songsBean.getAr()){
+            this.artistsName += arBean.getName();
+        }
+        this.alia = "";
+        for (String alia: songsBean.getAlia()){
+            this.alia += alia;
+        }
+        this.picUrl = songsBean.getAl().getPicUrl();
     }
 
-    public void setPicUrl(String picUrl){
-        this.picUrl = picUrl;
-    }
 
     public void setUrl(String url) {
         this.url = url;
@@ -48,26 +52,28 @@ public class MusicListInfo {
     //专辑名
     private String albumName;
     //作家名
-    private List<MusicList.ResultBean.SongsBean.ArtistsBean> artistsName;
-
-    public String getAlbumName() {
-        return albumName;
-    }
-
-    public List<MusicList.ResultBean.SongsBean.ArtistsBean> getArtistsName() {
-        return artistsName;
-    }
+    private String artistsName;
 
     //音乐图片地址
     private String picUrl;
     //音乐播放地址
     private String url;
-    //音乐附件信息
-    private List<String> alia;
 
-    public List<String> getAlia() {
+    //音乐附件信息
+    private String alia;
+
+    public String getAlia() {
         return alia;
     }
+
+    public String getAlbumName() {
+        return albumName;
+    }
+
+    public String getArtistsName() {
+        return artistsName;
+    }
+
 
     public String getId() {
         return id;

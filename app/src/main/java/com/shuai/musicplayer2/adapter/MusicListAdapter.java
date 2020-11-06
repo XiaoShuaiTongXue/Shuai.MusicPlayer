@@ -39,27 +39,17 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.Inne
 
     @Override
     public void onBindViewHolder(@NonNull InnerHolder holder, int position) {
+        com.shuai.musicplayer2.domain.MusicListInfo musicListInfo = mMusicListInfo.get(position);
         TextView tv_title = mItemView.findViewById(R.id.music_title);
         TextView tv_alias = mItemView.findViewById(R.id.music_alias);
         TextView tv_album = mItemView.findViewById(R.id.music_album);
         TextView tv_artists = mItemView.findViewById(R.id.music_artists);
         Button btn_mv = mItemView.findViewById(R.id.music_mv);
         ImageView iv_pic = mItemView.findViewById(R.id.music_pic);
-        com.shuai.musicplayer2.domain.MusicListInfo musicListInfo = mMusicListInfo.get(position);
         tv_title.setText(musicListInfo.getName());
-        String mArtist = "";
-        //处理多个作者
-        for (MusicList.ResultBean.SongsBean.ArtistsBean artist: musicListInfo.getArtistsName()) {
-            mArtist += artist.getName();
-        }
-        tv_artists.setText(mArtist);
-        tv_album.setText("-"+musicListInfo.getAlbumName());
-        //处理多个备注
-        String mAlias = "";
-        for (String alias: musicListInfo.getAlia()) {
-            mAlias += alias;
-        }
-        tv_alias.setText(mAlias);
+        tv_alias.setText(musicListInfo.getAlia());
+        tv_album.setText(musicListInfo.getAlbumName());
+        tv_artists.setText(musicListInfo.getArtistsName());
         if (musicListInfo.getMvid()==0){
             btn_mv.setVisibility(View.GONE);
         }
