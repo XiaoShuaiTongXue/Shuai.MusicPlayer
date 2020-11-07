@@ -22,7 +22,7 @@ public interface IPlayerController {
      * 开始播放
      * @param url 播放音乐的地址
      */
-    void start(String url);
+    void start(String url,boolean isLike);
 
     /**
      * 暂停或继续播放

@@ -16,10 +16,11 @@ public class PlayerPresenter extends Binder implements IPlayerController {
 
     private IPlayerViewController mViewController;
     private static final String TAG = "PlayerPresenter";
-    private static int mCurrentState = PLAY_STATE_STOP;
+    public static int sCurrentState = PLAY_STATE_STOP;
     private MediaPlayer mPlayer;
     private Timer mTimer;
     private SeekTimeTask mTimeTask;
+    private int mCurrentPosition;
 
     @Override
     public void registerIPlayViewController(IPlayerViewController iPlayerViewController) {
@@ -32,41 +33,43 @@ public class PlayerPresenter extends Binder implements IPlayerController {
     }
 
     @Override
-    public void start(String url) { ;
-        if (mPlayer!=null){
+    public void start(String url,boolean isLike) {
+        if (!isLike){
             stop();
+            initMediaPlayer();
+            try {
+                Log.i(TAG,url);
+                mPlayer.setDataSource(url);
+                mPlayer.prepare();
+                mPlayer.start();
+                startTimeTask();
+                sCurrentState = PLAY_STATE_START;
+            } catch (IOException e) {
+                Log.i(TAG,"error:"+e.toString());
+                e.printStackTrace();
+            }
+        }else if (sCurrentState == PLAY_STATE_PAUSE){
+            mViewController.onSeekChange(mCurrentPosition);
         }
-        initMediaPlayer();
-        try {
-            Log.i(TAG,url);
-            mPlayer.setDataSource(url);
-            mPlayer.prepare();
-            mPlayer.start();
-            mCurrentState = PLAY_STATE_START;
-            startTimeTask();
-            mViewController.onPlayStateChange(mCurrentState);
-        } catch (IOException e) {
-            Log.i(TAG,"error:"+e.toString());
-            e.printStackTrace();
-        }
+        mViewController.onPlayStateChange(sCurrentState);
     }
 
     @Override
     public void pauseOrResume() {
-        if(mCurrentState == PLAY_STATE_START){
+        if(sCurrentState == PLAY_STATE_START){
             if (mPlayer != null) {
                 mPlayer.pause();
-                mCurrentState = PLAY_STATE_PAUSE;
+                sCurrentState = PLAY_STATE_PAUSE;
                 stopTimeTask();
             }
-        }else if(mCurrentState == PLAY_STATE_PAUSE){
+        }else if(sCurrentState == PLAY_STATE_PAUSE){
             if (mPlayer != null) {
                 mPlayer.start();
-                mCurrentState = PLAY_STATE_START;
+                sCurrentState = PLAY_STATE_START;
                 startTimeTask();
             }
         }
-        mViewController.onPlayStateChange(mCurrentState);
+        mViewController.onPlayStateChange(sCurrentState);
     }
 
     /**
@@ -77,7 +80,6 @@ public class PlayerPresenter extends Binder implements IPlayerController {
             mPlayer = new MediaPlayer();
             mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         }
-        mViewController.onSeekChange(0);
     }
 
 
@@ -87,11 +89,11 @@ public class PlayerPresenter extends Binder implements IPlayerController {
     @Override
     public void stop() {
         Log.i(TAG,"停止播放");
-        if (mPlayer != null&&mPlayer.isPlaying()) {
+        if (mPlayer != null) {
             mPlayer.stop();
-            mCurrentState = PLAY_STATE_STOP;
+            sCurrentState = PLAY_STATE_STOP;
             if (mViewController != null) {
-                mViewController.onPlayStateChange(mCurrentState);
+                mViewController.onPlayStateChange(sCurrentState);
             }
             stopTimeTask();
             mPlayer.release();
@@ -133,8 +135,8 @@ public class PlayerPresenter extends Binder implements IPlayerController {
     class SeekTimeTask extends TimerTask{
         @Override
         public void run() {
-            int currentPosition = (int) (100.1*mPlayer.getCurrentPosition()/mPlayer.getDuration());
-            mViewController.onSeekChange(currentPosition);
+            mCurrentPosition = (int) (100.1*mPlayer.getCurrentPosition()/mPlayer.getDuration());
+            mViewController.onSeekChange(mCurrentPosition);
         }
     }
 

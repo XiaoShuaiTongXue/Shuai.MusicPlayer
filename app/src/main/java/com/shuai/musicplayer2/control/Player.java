@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.shuai.musicplayer2.R;
 import com.shuai.musicplayer2.interfaces.IPlayerController;
 import com.shuai.musicplayer2.interfaces.IPlayerViewController;
+import com.shuai.musicplayer2.presenter.PlayerPresenter;
 import com.shuai.musicplayer2.service.PlayService;
 import com.shuai.musicplayer2.utils.MenuList;
 import com.shuai.musicplayer2.utils.LikeUpdate;
@@ -92,6 +93,7 @@ public class Player extends AppCompatActivity {
                 .setDuration(15000);
         mRotation.setRepeatCount(Animation.INFINITE);
         mRotation.setInterpolator(new LinearInterpolator());
+        mRotation.start();
     }
 
 
@@ -216,16 +218,9 @@ public class Player extends AppCompatActivity {
      */
     private void startPlay() {
         //进入新的音乐
-        Log.i(TAG,"->startPlay");
-        if(isLike==false){
-            if (mRotation!=null){
-                mRotation.start();
-            }
-            if (mController != null) {
-                mController.start(mMusicInfo.getUrl());
-            }
+        if (mController != null) {
+            mController.start(mMusicInfo.getUrl(), isLike);
         }
-
     }
 
     /**
