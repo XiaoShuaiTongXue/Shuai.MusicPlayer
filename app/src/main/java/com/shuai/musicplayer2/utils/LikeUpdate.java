@@ -3,14 +3,11 @@ package com.shuai.musicplayer2.utils;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 import android.widget.Toast;
-
-import com.shuai.musicplayer2.domain.MusicListInfo;
 
 public class LikeUpdate {
     public void likeAdd(Context context, int position){
-        String like_id = GetMenuList.sMusicListInfo.get(position).getId();
+        String like_id = MenuList.sMusicListInfo.get(position).getId();
         SqlHelper helper = new SqlHelper(context);
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -24,7 +21,7 @@ public class LikeUpdate {
         db.close();
     }
     public void likeDelete(Context context, int position){
-        String like_id = GetMenuList.sMusicListInfo.get(position).getId();
+        String like_id = MenuList.sMusicListInfo.get(position).getId();
         SqlHelper helper = new SqlHelper(context);
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();

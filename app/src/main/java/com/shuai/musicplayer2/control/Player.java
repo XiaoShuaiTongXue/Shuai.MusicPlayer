@@ -2,7 +2,6 @@ package com.shuai.musicplayer2.control;
 
 import android.animation.ObjectAnimator;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Build;
@@ -22,12 +21,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.shuai.musicplayer2.R;
-import com.shuai.musicplayer2.domain.MusicInfo;
-import com.shuai.musicplayer2.domain.MusicList;
 import com.shuai.musicplayer2.interfaces.IPlayerController;
 import com.shuai.musicplayer2.interfaces.IPlayerViewController;
 import com.shuai.musicplayer2.service.PlayService;
-import com.shuai.musicplayer2.utils.GetMenuList;
+import com.shuai.musicplayer2.utils.MenuList;
 import com.shuai.musicplayer2.utils.LikeUpdate;
 
 
@@ -71,13 +68,13 @@ public class Player extends AppCompatActivity {
          */
         Intent intent = getIntent();
         int newPosition = intent.getIntExtra("position",-1);
-        String newMusicId = GetMenuList.sMusicListInfo.get(newPosition).getId();
+        String newMusicId = MenuList.sMusicListInfo.get(newPosition).getId();
         if (mMusicId!=null&&mMusicId.equals(newMusicId)){
             isLike = true;
         }
         mPosition = newPosition;
         mMusicId = newMusicId;
-        mMusicInfo = GetMenuList.sMusicListInfo.get(mPosition);
+        mMusicInfo = MenuList.sMusicListInfo.get(mPosition);
         ((TextView)findViewById(R.id.player_title)).setText(mMusicInfo.getName());
         ((TextView)findViewById(R.id.player_alis)).setText(mMusicInfo.getAlia());
         ((TextView)findViewById(R.id.player_artists)).setText(mMusicInfo.getArtistsName());
@@ -218,13 +215,17 @@ public class Player extends AppCompatActivity {
      * 开始播放
      */
     private void startPlay() {
+        //进入新的音乐
         Log.i(TAG,"->startPlay");
-        if (mRotation!=null){
-            mRotation.start();
+        if(isLike==false){
+            if (mRotation!=null){
+                mRotation.start();
+            }
+            if (mController != null) {
+                mController.start(mMusicInfo.getUrl());
+            }
         }
-        if (mController != null&&isLike==false) {
-            mController.start(mMusicInfo.getUrl());
-        }
+
     }
 
     /**

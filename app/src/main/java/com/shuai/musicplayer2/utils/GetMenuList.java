@@ -1,13 +1,9 @@
 package com.shuai.musicplayer2.utils;
 
-import android.os.Message;
 import android.util.Log;
 
 import com.shuai.musicplayer2.api.Api;
-import com.shuai.musicplayer2.control.Result;
-import com.shuai.musicplayer2.domain.MusicInfo;
 import com.shuai.musicplayer2.domain.MusicList;
-import com.shuai.musicplayer2.domain.MusicUrl;
 import com.shuai.musicplayer2.domain.TopMusicList;
 
 import java.net.HttpURLConnection;
@@ -19,19 +15,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+
 public class GetMenuList {
 
-    public static List<com.shuai.musicplayer2.domain.MusicListInfo> sMusicListInfo;
-    public static int sCount;
-    private  Retrofit mRetrofit;
+    private Retrofit mRetrofit;
     private  Api mApi;
     private  Call<MusicList> mMusicListTask;
-    private static final String TAG = "GetMusicListInfo";
-    private Call<MusicInfo> mMusicInfoTask;
-    private Call<MusicUrl> mMusicUrlTask;
-    private List<String> mSongsId;
-    private int mNum;
     private Call<TopMusicList> mTopMusicListTask;
+    private List<String> mSongsId;
+    private static final String TAG = "GetMenuList";
+    public static int sCount;
 
     /**
      * 初始化播放菜单的音乐
@@ -57,7 +50,7 @@ public class GetMenuList {
                     //将取出的id存放到列表中，将具体信息查询独立出来，方便本地数据库的查询
                     saveMusicListId(songs);
                     //根据列表的信息更新每一条信息的地址
-                    updateInfo();
+                    new MenuList(mSongsId,sCount);
                 }
             }
 
@@ -80,19 +73,15 @@ public class GetMenuList {
                 if(response.code()== HttpURLConnection.HTTP_OK){
                     List<TopMusicList.PlaylistBean.TrackIdsBean> trackIds = response.body().getPlaylist().getTrackIds();
                     saveTopListId(trackIds);
-                    updateInfo();
+                    new MenuList(mSongsId,sCount);
                 }
             }
 
             @Override
             public void onFailure(Call<TopMusicList> call, Throwable t) {
-
+                Log.i(TAG,t.toString());
             }
         });
-    }
-
-    public void getLikeList(int count){
-
     }
 
     private void saveTopListId(List<TopMusicList.PlaylistBean.TrackIdsBean> trackIds) {
@@ -116,62 +105,10 @@ public class GetMenuList {
             mSongsId = null;
         }
         mSongsId = new ArrayList<String>();
-        for (int i = 0;i < 30;i++){
-            mSongsId.add(songs.get(i).getId());
+        for (MusicList.ResultBean.SongsBean songsBean : songs){
+            mSongsId.add(songsBean.getId());
         }
         songs.clear();
         songs = null;
-    }
-
-    /**
-     * 更新每个列表的pic地址和Url地址
-     * 执行此方法必须声明count的值
-     */
-    private void updateInfo() {
-        if (sMusicListInfo != null) {
-            sMusicListInfo.clear();
-            sMusicListInfo = null;
-        }
-        sMusicListInfo = new ArrayList<com.shuai.musicplayer2.domain.MusicListInfo>();
-        mNum = 0;
-        for (int i = 0; i < sCount; i++) {
-            com.shuai.musicplayer2.domain.MusicListInfo mMusicListInfo = new com.shuai.musicplayer2.domain.MusicListInfo();
-            String musicId = mSongsId.get(i);
-            mMusicInfoTask = mApi.getMusicInfo(musicId);
-            mMusicInfoTask.enqueue(new Callback<MusicInfo>() {
-               @Override
-               public void onResponse(Call<MusicInfo> call, Response<MusicInfo> response) {
-                   if (response.code() == HttpURLConnection.HTTP_OK){
-                       mMusicListInfo.setMusicInfo(response.body().getSongs().get(0));
-                       mNum +=1;
-                       if(mNum == sCount){
-                           Message message = Message.obtain();
-                           message.what = 100;
-                           Result.mHandler.sendMessage(message);
-                       }
-                   }
-               }
-
-               @Override
-               public void onFailure(Call<MusicInfo> call, Throwable t) {
-                   Log.i(TAG,t.toString());
-               }
-            });
-            mMusicUrlTask = mApi.getMusicUrl(musicId);
-            mMusicUrlTask.enqueue(new Callback<MusicUrl>() {
-               @Override
-               public void onResponse(Call<MusicUrl> call, Response<MusicUrl> response) {
-                   if (response.code() == HttpURLConnection.HTTP_OK){
-                       mMusicListInfo.setUrl(response.body().getData().get(0).getUrl());
-                   }
-               }
-
-               @Override
-               public void onFailure(Call<MusicUrl> call, Throwable t) {
-                   Log.i(TAG,t.toString());
-               }
-            });
-            sMusicListInfo.add(mMusicListInfo);
-        }
     }
 }

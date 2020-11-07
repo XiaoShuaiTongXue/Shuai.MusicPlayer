@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.shuai.musicplayer2.R;
-import com.shuai.musicplayer2.utils.GetMenuList;
+import com.shuai.musicplayer2.utils.MenuList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +71,7 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.Inne
     }
     @Override
     public int getItemCount() {
-        return GetMenuList.sCount;
+        return MenuList.sCount;
     }
 
     /**
@@ -79,7 +79,7 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.Inne
      */
     public void setData() {
         mMusicListInfo.clear();
-        mMusicListInfo.addAll(GetMenuList.sMusicListInfo);
+        mMusicListInfo.addAll(MenuList.sMusicListInfo);
         notifyDataSetChanged();
     }
 

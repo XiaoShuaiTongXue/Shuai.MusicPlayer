@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.shuai.musicplayer2.R;
 import com.shuai.musicplayer2.adapter.TopListAdapter;
 import com.shuai.musicplayer2.utils.GetMenuList;
+import com.shuai.musicplayer2.utils.MenuList;
 import com.shuai.musicplayer2.utils.GetTopList;
 
 
