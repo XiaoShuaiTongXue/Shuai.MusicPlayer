@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.shuai.musicplayer2.R;
 import com.shuai.musicplayer2.adapter.TopListAdapter;
 import com.shuai.musicplayer2.utils.GetMenuList;
+import com.shuai.musicplayer2.utils.LikeCRUD;
 import com.shuai.musicplayer2.utils.MenuList;
 import com.shuai.musicplayer2.utils.GetTopList;
 
@@ -57,6 +59,13 @@ public class Main extends AppCompatActivity {
         };
     }
 
+    public void like(View view){
+        new LikeCRUD().likeSelete(getApplicationContext(),10);
+        Intent intent = new Intent(Main.this,Result.class);
+        intent.putExtra("Tag","我喜欢的音乐");
+        intent.putExtra("keyword","");
+        startActivity(intent);
+    }
 
     public void search(View view) {
         mKeyWord = mEditText.getText().toString();

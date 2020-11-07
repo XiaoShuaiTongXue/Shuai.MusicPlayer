@@ -23,10 +23,9 @@ import com.bumptech.glide.Glide;
 import com.shuai.musicplayer2.R;
 import com.shuai.musicplayer2.interfaces.IPlayerController;
 import com.shuai.musicplayer2.interfaces.IPlayerViewController;
-import com.shuai.musicplayer2.presenter.PlayerPresenter;
 import com.shuai.musicplayer2.service.PlayService;
 import com.shuai.musicplayer2.utils.MenuList;
-import com.shuai.musicplayer2.utils.LikeUpdate;
+import com.shuai.musicplayer2.utils.LikeCRUD;
 
 
 import static com.shuai.musicplayer2.interfaces.IPlayerController.PLAY_STATE_PAUSE;
@@ -140,7 +139,7 @@ public class Player extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.i(TAG,"我点击了喜欢");
-                new LikeUpdate().likeAdd(getApplicationContext(),mPosition);
+                new LikeCRUD().likeAdd(getApplicationContext(),mPosition);
             }
         });
     }
