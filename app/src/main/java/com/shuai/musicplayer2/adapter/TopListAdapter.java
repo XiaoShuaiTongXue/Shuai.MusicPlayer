@@ -54,7 +54,7 @@ public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.InnerHol
         ((TextView)mItemView
                 .findViewById(R.id.toplist_description))
                 .setText(listBean.getDescription());
-        holder.setId(mTopList.get(position).getId());
+        holder.setInfo(listBean.getId(),listBean.getName());
     }
 
     @Override
@@ -67,7 +67,7 @@ public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.InnerHol
     }
 
     public interface OnTopListClickListener{
-        void onTopListClick(String id);
+        void onTopListClick(String id,String name);
     }
 
     /**
@@ -77,7 +77,6 @@ public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.InnerHol
         mTopList.clear();
         if (GetTopList.sTopList!=null){
             mTopList.addAll(GetTopList.sTopList);
-            Log.i(TAG,"执行了，不是空");
         }
         notifyDataSetChanged();
     }
@@ -85,7 +84,7 @@ public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.InnerHol
     public class InnerHolder extends RecyclerView.ViewHolder {
 
         private String mId;
-
+        private String mName;
         public InnerHolder(@NonNull View itemView) {
             super(itemView);
             mItemView = itemView;
@@ -93,13 +92,14 @@ public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.InnerHol
                 @Override
                 public void onClick(View v) {
                     if(mTopListClickListener != null){
-                        mTopListClickListener.onTopListClick(mId);
+                        mTopListClickListener.onTopListClick(mId,mName);
                     }
                 }
             });
         }
-        public void setId(String id){
+        public void setInfo(String id,String name){
             mId = id;
+            mName = name;
         }
     }
 }

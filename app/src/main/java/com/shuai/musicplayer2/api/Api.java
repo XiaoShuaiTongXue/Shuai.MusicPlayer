@@ -5,6 +5,7 @@ import com.shuai.musicplayer2.domain.MusicInfo;
 import com.shuai.musicplayer2.domain.MusicList;
 import com.shuai.musicplayer2.domain.MusicUrl;
 import com.shuai.musicplayer2.domain.TopList;
+import com.shuai.musicplayer2.domain.TopMusicList;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -22,4 +23,7 @@ public interface Api {
 
     @GET("/toplist")
     Call<TopList> getTopList();
+
+    @GET("/playlist/detail")
+    Call<TopMusicList> getTopMusicList(@Query("id") String id);
 }

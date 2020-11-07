@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -13,14 +12,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.shuai.musicplayer2.R;
-import com.shuai.musicplayer2.adapter.MusicListAdapter;
 import com.shuai.musicplayer2.adapter.TopListAdapter;
-import com.shuai.musicplayer2.domain.TopList;
 import com.shuai.musicplayer2.utils.GetMenuList;
 import com.shuai.musicplayer2.utils.GetTopList;
 
@@ -66,7 +62,7 @@ public class Main extends AppCompatActivity {
         if(mKeyWord ==null|| mKeyWord.equals("")){
             Toast.makeText(this, "请输入搜索关键词", Toast.LENGTH_SHORT).show();
         }
-        new GetMenuList(mKeyWord);
+        new GetMenuList(10).getMusicList(mKeyWord);
         Intent intent = new Intent(Main.this,Result.class);
         intent.putExtra("Tag","搜索：");
         intent.putExtra("keyword",mKeyWord);
@@ -77,8 +73,12 @@ public class Main extends AppCompatActivity {
     public void initListener(){
         mAdapter.setOnTopListClick(new TopListAdapter.OnTopListClickListener() {
             @Override
-            public void onTopListClick(String id) {
-                Toast.makeText(Main.this, "你点击了："+id, Toast.LENGTH_SHORT).show();
+            public void onTopListClick(String id,String name) {
+                new GetMenuList(10).getTopList(id);
+                Intent intent = new Intent(Main.this,Result.class);
+                intent.putExtra("Tag","模块：");
+                intent.putExtra("keyword",name);
+                startActivity(intent);
             }
         });
     }
