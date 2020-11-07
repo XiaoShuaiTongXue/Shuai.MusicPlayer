@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.shuai.musicplayer2.api.Api;
 import com.shuai.musicplayer2.control.Main;
+import com.shuai.musicplayer2.control.Result;
 import com.shuai.musicplayer2.domain.MusicInfo;
 import com.shuai.musicplayer2.domain.MusicList;
 import com.shuai.musicplayer2.domain.MusicListInfo;
@@ -32,6 +33,7 @@ public class GetMenuList {
     private Call<MusicUrl> mMusicUrlTask;
     private static String mKeyword;
     private List<String> mSongsId;
+    private int mNum;
 
     /**
      * 根据关键词获得音乐列表，并将ID信息存放到数组中
@@ -53,9 +55,6 @@ public class GetMenuList {
                         saveInList(songs);
                         //根据列表的信息更新每一条信息的地址
                         updateInfo();
-                        Message message = Message.obtain();
-                        message.what = 100;
-                        Main.mHandler.sendMessage(message);
                     }
                 }
 
@@ -93,6 +92,7 @@ public class GetMenuList {
             sMusicListInfo = null;
         }
         sMusicListInfo = new ArrayList<com.shuai.musicplayer2.domain.MusicListInfo>();
+        mNum = 0;
         for (int i = 0; i < count ; i++) {
             com.shuai.musicplayer2.domain.MusicListInfo mMusicListInfo = new com.shuai.musicplayer2.domain.MusicListInfo();
             String musicId = mSongsId.get(i);
@@ -102,6 +102,12 @@ public class GetMenuList {
                public void onResponse(Call<MusicInfo> call, Response<MusicInfo> response) {
                    if (response.code() == HttpURLConnection.HTTP_OK){
                        mMusicListInfo.setMusicInfo(response.body().getSongs().get(0));
+                       mNum +=1;
+                       if(mNum == count){
+                           Message message = Message.obtain();
+                           message.what = 100;
+                           Result.mHandler.sendMessage(message);
+                       }
                    }
                }
 

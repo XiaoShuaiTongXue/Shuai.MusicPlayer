@@ -86,6 +86,10 @@
                     android:text="最新音乐排行榜"/>
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
+        <ProgressBar
+            android:id="@+id/pv_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
         <androidx.recyclerview.widget.RecyclerView
             android:layout_marginTop="10dp"
             android:id="@+id/rv_toplist"

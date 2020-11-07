@@ -7,6 +7,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,7 @@ public class Main extends AppCompatActivity {
     public static Handler mHandler;
     private String mKeyWord;
     private RecyclerView mTopList;
+    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,16 +47,14 @@ public class Main extends AppCompatActivity {
         mEditText = findViewById(R.id.keywords);
         mTopList = findViewById(R.id.rv_toplist);
         mAdapter = new TopListAdapter();
+        mProgressBar = findViewById(R.id.pv_main);
+        mProgressBar.setVisibility(View.VISIBLE);
         mHandler = new Handler(){
             @Override
             public void handleMessage(@NonNull Message msg) {
-                if (msg.what==100){
-                    /**
-                     * Result数据加载完毕，页面跳转到Result返回搜索结果
-                     */
-                    goResult();
-                }else if(msg.what==200){
+                if(msg.what==200){
                     initTopList();
+                    mProgressBar.setVisibility(View.GONE);
                 }
             }
         };
@@ -67,9 +67,6 @@ public class Main extends AppCompatActivity {
             Toast.makeText(this, "请输入搜索关键词", Toast.LENGTH_SHORT).show();
         }
         new GetMenuList(mKeyWord);
-    }
-
-    private void goResult() {
         Intent intent = new Intent(Main.this,Result.class);
         intent.putExtra("Tag","搜索：");
         intent.putExtra("keyword",mKeyWord);
