@@ -1,5 +1,7 @@
 package com.shuai.musicplayer2.control;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,6 +9,7 @@ import android.os.Message;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.shuai.musicplayer2.R;
 import com.shuai.musicplayer2.adapter.MusicListAdapter;
+import com.shuai.musicplayer2.utils.LikeCRUD;
+import com.shuai.musicplayer2.utils.MenuList;
 
 public class Result extends AppCompatActivity {
 
@@ -25,6 +30,7 @@ public class Result extends AppCompatActivity {
     private TextView mInfo;
     private ProgressBar mProgressBar;
     public static Handler mHandler;
+    private String mTag;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,7 +45,8 @@ public class Result extends AppCompatActivity {
         mProgressBar = findViewById(R.id.pb_result);
         mProgressBar.setVisibility(View.VISIBLE);
         Intent intent = getIntent();
-        String info = intent.getStringExtra("Tag")+intent.getStringExtra("keyword");
+        mTag = intent.getStringExtra("Tag");
+        String info = mTag +intent.getStringExtra("keyword");
         mInfo.setText(info);
         mHandler = new Handler(){
             @Override
@@ -51,6 +58,7 @@ public class Result extends AppCompatActivity {
                     mProgressBar.setVisibility(View.GONE);
                     //UI更新搜索结果
                     update();
+                    initListener();
                 }
             }
         };
@@ -66,6 +74,34 @@ public class Result extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        if (mTag.equals("我喜欢的音乐")){
+            mAdapter.setOnLongClickListener(new MusicListAdapter.OnLongClickListener() {
+                @Override
+                public void onLongClick(int position) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Result.this);
+                    builder.setMessage("确认从喜欢的列表中删除："+MenuList.sMusicListInfo.get(position).getName());
+                    builder.setCancelable(true);
+                    builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            new LikeCRUD().likeDelete(Result.this,position);
+                            MenuList.sMusicListInfo.remove(position);
+                            finish();
+                            Intent intent = new Intent(Result.this,Main.class);
+                            startActivity(intent);
+                        }
+                    });
+                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            });
+        }
     }
 
     //更新UI
@@ -74,6 +110,5 @@ public class Result extends AppCompatActivity {
         mAdapter.setData();
         mRvResult.setAdapter(mAdapter);
         mRvResult.setLayoutManager(layoutManager);
-        initListener();
     }
 }

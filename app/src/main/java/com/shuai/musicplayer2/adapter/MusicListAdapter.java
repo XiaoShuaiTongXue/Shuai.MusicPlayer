@@ -24,6 +24,7 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.Inne
     private  View mItemView;
     private OnMusicClickListener mMusicClickListener;
     private Context mContext;
+    private OnLongClickListener mLongClickListener;
 
 
     @NonNull
@@ -69,6 +70,15 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.Inne
     public interface OnMusicClickListener{
         void onMusicClick(int position);
     }
+
+    public void setOnLongClickListener(OnLongClickListener listener){
+        mLongClickListener = listener;
+    }
+
+    public interface OnLongClickListener {
+        void onLongClick(int position);
+    }
+
     @Override
     public int getItemCount() {
         return MenuList.sCount;
@@ -96,6 +106,13 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.Inne
                     if(mMusicClickListener != null){
                         mMusicClickListener.onMusicClick(mPosition);
                     }
+                }
+            });
+            mItemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    mLongClickListener.onLongClick(mPosition);
+                    return true;
                 }
             });
         }

@@ -4,15 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/shape_player"
-    android:layout_marginTop="10dp">
+    android:background="@drawable/shape_player">
 
     <androidx.cardview.widget.CardView
         app:cardUseCompatPadding="true"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         app:cardBackgroundColor="@color/colorButton"
-        app:cardCornerRadius="15dp">
+        app:cardCornerRadius="15dp"
+        android:layout_marginTop="15dp">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">

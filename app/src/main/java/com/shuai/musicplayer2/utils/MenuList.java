@@ -4,6 +4,7 @@ import android.os.Message;
 import android.util.Log;
 
 import com.shuai.musicplayer2.api.Api;
+import com.shuai.musicplayer2.control.Main;
 import com.shuai.musicplayer2.control.Result;
 import com.shuai.musicplayer2.domain.MusicInfo;
 import com.shuai.musicplayer2.domain.MusicList;
@@ -28,7 +29,7 @@ public class MenuList {
     private List<String> mSongsId;
     private  Call<MusicList> mMusicListTask;
     private Call<TopMusicList> mTopMusicListTask;
-    private static final String TAG = "GetMusicListInfo";
+    private static final String TAG = "MenuList";
     private Call<MusicInfo> mMusicInfoTask;
     private Call<MusicUrl> mMusicUrlTask;
     private int mNum;

@@ -60,11 +60,14 @@ public class Main extends AppCompatActivity {
     }
 
     public void like(View view){
-        new LikeCRUD().likeSelete(getApplicationContext(),10);
-        Intent intent = new Intent(Main.this,Result.class);
-        intent.putExtra("Tag","我喜欢的音乐");
-        intent.putExtra("keyword","");
-        startActivity(intent);
+        if(new LikeCRUD().likeSelete(getApplicationContext(),10)){
+            Intent intent = new Intent(Main.this,Result.class);
+            intent.putExtra("Tag","我喜欢的音乐");
+            intent.putExtra("keyword","");
+            startActivity(intent);
+        }else {
+            Toast.makeText(this, "喜欢的音乐为空", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void search(View view) {
