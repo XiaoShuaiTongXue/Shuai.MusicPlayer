@@ -12,21 +12,13 @@
         android:layout_height="0dp"
         android:layout_weight="13">
         <TextView
+            android:id="@+id/player_title"
             android:layout_marginTop="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="我是标题"
-            android:id="@+id/player_title"
-            android:textSize="20sp"
-            android:textColor="@color/colorButton"/>
-        <TextView
-            android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="(我是备注)"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/player_title"
-            android:id="@+id/player_alis"
+            android:singleLine="true"
+            android:width="250dp"
             android:textSize="20sp"
             android:textColor="@color/colorButton"/>
         <TextView
@@ -37,6 +29,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="我是作者"
+            android:singleLine="true"
+            android:width="250dp"
+            android:textColor="@color/colorButton"/>
+        <TextView
+            android:id="@+id/player_alis"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我是备注"
+            android:singleLine="true"
+            android:width="250dp"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@id/player_artists"
             android:textColor="@color/colorButton"/>
         <Button
             android:layout_alignTop="@id/player_title"

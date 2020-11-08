@@ -27,7 +27,7 @@ public class LikeCRUD {
             ContentValues contentValues = new ContentValues();
             contentValues.put("like_id",like_id);
             long l =db.insert("like_info",null,contentValues);
-            if(l != -1){
+            if(l == -1){
                 Toast.makeText(context, "该歌曲已经添加", Toast.LENGTH_SHORT).show();
             }else {
                 Toast.makeText(context, "加入喜欢成功", Toast.LENGTH_SHORT).show();

@@ -17,6 +17,8 @@
             android:orientation="horizontal">
             <EditText
                 android:id="@+id/keywords"
+                android:singleLine="true"
+                android:maxLines="1"
                 android:layout_width="0dp"
                 android:layout_weight="4"
                 android:layout_height="wrap_content"

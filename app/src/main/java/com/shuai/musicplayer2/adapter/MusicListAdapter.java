@@ -44,15 +44,16 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.Inne
         TextView tv_alias = mItemView.findViewById(R.id.music_alias);
         TextView tv_album = mItemView.findViewById(R.id.music_album);
         TextView tv_artists = mItemView.findViewById(R.id.music_artists);
-        Button btn_mv = mItemView.findViewById(R.id.music_mv);
+        // TODO: 2020/11/8 设置Mv是否可以播放 
+//        Button btn_mv = mItemView.findViewById(R.id.music_mv);
+//        if (musicListInfo.getMvid()==0){
+//            btn_mv.setVisibility(View.GONE);
+//        }
         ImageView iv_pic = mItemView.findViewById(R.id.music_pic);
         tv_title.setText(musicListInfo.getName());
         tv_alias.setText(musicListInfo.getAlia());
         tv_album.setText(musicListInfo.getAlbumName());
         tv_artists.setText(musicListInfo.getArtistsName());
-        if (musicListInfo.getMvid()==0){
-            btn_mv.setVisibility(View.GONE);
-        }
         Glide.with(mContext)
                 .load(musicListInfo.getPicUrl())
                 .thumbnail(0.1f)
