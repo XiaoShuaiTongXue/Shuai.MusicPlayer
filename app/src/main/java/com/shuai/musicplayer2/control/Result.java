@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.shuai.musicplayer2.R;
 import com.shuai.musicplayer2.adapter.MusicListAdapter;
+import com.shuai.musicplayer2.domain.MusicListInfo;
 import com.shuai.musicplayer2.utils.LikeCRUD;
 import com.shuai.musicplayer2.utils.MenuList;
 
@@ -69,18 +70,24 @@ public class Result extends AppCompatActivity {
         mAdapter.setOnMusicClickListener(new MusicListAdapter.OnMusicClickListener() {
             @Override
             public void onMusicClick(int position) {
-                Intent intent = new Intent(Result.this,Player.class);
-                intent.putExtra("position",position);
-                startActivity(intent);
+                if (MenuList.sMusicListInfo.get(position).getUrl()!=null){
+                    Intent intent = new Intent(Result.this,Player.class);
+                    intent.putExtra("position",position);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(Result.this, "付费歌曲，不支持试听", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-        if (mTag.equals("我喜欢的音乐")){
-            mAdapter.setOnLongClickListener(new MusicListAdapter.OnLongClickListener() {
-                @Override
-                public void onLongClick(int position) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Result.this);
-                    builder.setMessage("确认从喜欢的列表中删除："+MenuList.sMusicListInfo.get(position).getName());
-                    builder.setCancelable(true);
+        mAdapter.setOnLongClickListener(new MusicListAdapter.OnLongClickListener() {
+            @Override
+            public void onLongClick(int position) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(Result.this);
+                MusicListInfo info = MenuList.sMusicListInfo.get(position);
+                builder.setMessage("音乐名："+info.getName()+"\r\n作者："+info.getArtistsName()+"\r\n专辑："+info.getAlbumName());
+                builder.setCancelable(true);
+                if (mTag.equals("我喜欢的音乐")){
+                    builder.setTitle("确认删除："+info.getName());
                     builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -97,11 +104,12 @@ public class Result extends AppCompatActivity {
                             dialog.dismiss();
                         }
                     });
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
                 }
-            });
-        }
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
     }
 
     //更新UI

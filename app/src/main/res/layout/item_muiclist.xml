@@ -95,6 +95,16 @@
 <!--                android:layout_alignParentRight="true"-->
 <!--                android:layout_centerVertical="true"-->
 <!--                android:layout_marginRight="20dp"/>-->
+            <TextView
+                android:id="@+id/tv_fee"
+                android:gravity="center"
+                android:layout_below="@id/music_pic"
+                android:layout_alignLeft="@id/music_pic"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="付费歌曲"
+                android:textSize="12sp"
+                android:textColor="#ff0000"/>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

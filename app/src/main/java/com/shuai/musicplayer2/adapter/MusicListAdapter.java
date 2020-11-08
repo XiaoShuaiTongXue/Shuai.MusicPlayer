@@ -40,20 +40,20 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.Inne
     @Override
     public void onBindViewHolder(@NonNull InnerHolder holder, int position) {
         com.shuai.musicplayer2.domain.MusicListInfo musicListInfo = mMusicListInfo.get(position);
-        TextView tv_title = mItemView.findViewById(R.id.music_title);
-        TextView tv_alias = mItemView.findViewById(R.id.music_alias);
-        TextView tv_album = mItemView.findViewById(R.id.music_album);
-        TextView tv_artists = mItemView.findViewById(R.id.music_artists);
-        // TODO: 2020/11/8 设置Mv是否可以播放 
+        ((TextView)mItemView.findViewById(R.id.music_title)).setText(musicListInfo.getName());
+        ((TextView)mItemView.findViewById(R.id.music_alias)).setText(musicListInfo.getAlia());
+        ((TextView)mItemView.findViewById(R.id.music_album)).setText(musicListInfo.getAlbumName());
+        ((TextView)mItemView.findViewById(R.id.music_artists)).setText(musicListInfo.getArtistsName());
+        // TODO: 2020/11/8 设置Mv是否可以播放
 //        Button btn_mv = mItemView.findViewById(R.id.music_mv);
 //        if (musicListInfo.getMvid()==0){
 //            btn_mv.setVisibility(View.GONE);
 //        }
         ImageView iv_pic = mItemView.findViewById(R.id.music_pic);
-        tv_title.setText(musicListInfo.getName());
-        tv_alias.setText(musicListInfo.getAlia());
-        tv_album.setText(musicListInfo.getAlbumName());
-        tv_artists.setText(musicListInfo.getArtistsName());
+        TextView iv_fee = mItemView.findViewById(R.id.tv_fee);
+        if (musicListInfo.getUrl()!=null){
+            iv_fee.setVisibility(View.GONE);
+        }
         Glide.with(mContext)
                 .load(musicListInfo.getPicUrl())
                 .thumbnail(0.1f)
