@@ -1,7 +1,6 @@
 package com.shuai.musicplayer2.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +39,7 @@ public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.InnerHol
     @Override
     public void onBindViewHolder(@NonNull InnerHolder holder, int position) {
         TopList.ListBean listBean = mTopList.get(position);
-        ImageView toplist_pic=  mItemView.findViewById(R.id.toplist_pic);
+        ImageView toplist_pic=  mItemView.findViewById(R.id.cl_pic);
         Glide.with(mContext)
                 .load(listBean.getCoverImgUrl())
                 .thumbnail(0.1f)
@@ -49,10 +48,10 @@ public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.InnerHol
                 .findViewById(R.id.toplist_updateFrequency))
                 .setText(listBean.getUpdateFrequency());
         ((TextView)mItemView
-                .findViewById(R.id.toplist_name))
+                .findViewById(R.id.cl_name))
                 .setText(listBean.getName());
         ((TextView)mItemView
-                .findViewById(R.id.toplist_description))
+                .findViewById(R.id.cl_description))
                 .setText(listBean.getDescription());
         holder.setInfo(listBean.getId(),listBean.getName());
     }

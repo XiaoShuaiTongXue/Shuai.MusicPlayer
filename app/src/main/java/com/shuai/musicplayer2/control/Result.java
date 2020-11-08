@@ -94,8 +94,6 @@ public class Result extends AppCompatActivity {
                             new LikeCRUD().likeDelete(Result.this,position);
                             MenuList.sMusicListInfo.remove(position);
                             finish();
-                            Intent intent = new Intent(Result.this,Main.class);
-                            startActivity(intent);
                         }
                     });
                     builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {

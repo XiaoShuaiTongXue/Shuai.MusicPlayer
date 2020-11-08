@@ -23,15 +23,6 @@
                 android:layout_height="90dp"
                 android:background="@drawable/none"/>
             <TextView
-                android:id="@+id/toplist_updateFrequency"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/cl_pic"
-                android:layout_alignBottom="@id/cl_pic"
-                android:textSize="10sp"
-                android:textColor="#FFFFFF"
-                android:text="每周三更新"/>
-            <TextView
                 android:id="@+id/cl_name"
                 android:layout_marginTop="20dp"
                 android:gravity="center"
@@ -39,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorButton"
-                android:text="云音乐飙升榜"/>
+                android:text="小帅"/>
             <TextView
                 android:id="@+id/cl_description"
                 android:layout_marginTop="10dp"
@@ -49,7 +40,7 @@
                 android:layout_below="@+id/cl_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="云音乐中每天热度上升最快的100首单曲，每日更新。"/>
+                android:text="这首歌词竟然是我伦写的，写得很好哎"/>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

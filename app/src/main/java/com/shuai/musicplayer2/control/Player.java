@@ -47,6 +47,8 @@ public class Player extends AppCompatActivity {
     private com.shuai.musicplayer2.domain.MusicListInfo mMusicInfo;
     private boolean isLike = false;
     private Button mLike;
+    private Button mDownload;
+    private Button mComment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ public class Player extends AppCompatActivity {
         setContentView(R.layout.acitivity_player);
         //初始化界面
         initView();
+        //初始化控件的点击事件
         initEvent();
         initService();
         initBindService();
@@ -79,6 +82,8 @@ public class Player extends AppCompatActivity {
         ((TextView)findViewById(R.id.player_alis)).setText(mMusicInfo.getAlia());
         ((TextView)findViewById(R.id.player_artists)).setText(mMusicInfo.getArtistsName());
         mLike = findViewById(R.id.player_like);
+        mDownload = findViewById(R.id.player_download);
+        mComment = findViewById(R.id.player_comment);
         Button mv = findViewById(R.id.player_mv);
         if (mMusicInfo.getMvid()==0){
             mv.setVisibility(View.GONE);
@@ -135,11 +140,30 @@ public class Player extends AppCompatActivity {
             }
         });
 
+        //添加喜欢的音乐的点击事件
         mLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG,"我点击了喜欢");
                 new LikeCRUD().likeAdd(getApplicationContext(),mPosition);
+            }
+        });
+
+        //添加下载按钮的点击事件
+        mDownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        //添加评论按钮的点击事件
+        mComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Player.this,Comment.class);
+                intent.putExtra("name",mMusicInfo.getName());
+                intent.putExtra("id",mMusicInfo.getId());
+                startActivity(intent);
             }
         });
     }

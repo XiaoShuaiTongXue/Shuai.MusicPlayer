@@ -75,11 +75,13 @@
             android:layout_height="25dp"
             android:background="@drawable/like"/>
         <Button
+            android:id="@+id/player_download"
             android:layout_centerHorizontal="true"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:background="@drawable/download"/>
         <Button
+            android:id="@+id/player_comment"
             android:layout_alignParentRight="true"
             android:layout_width="25dp"
             android:layout_height="25dp"
