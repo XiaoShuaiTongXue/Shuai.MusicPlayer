@@ -1,6 +1,7 @@
 package com.shuai.musicplayer2.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,9 +63,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
      */
     public void setData() {
         mClList.clear();
-        if (GetCommentList.sHotComments != null){
-            mClList = GetCommentList.sHotComments;
-        }
+        mClList = GetCommentList.sHotComments;
         notifyDataSetChanged();
     }
 
@@ -72,6 +71,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
 
         public InnerHolder(@NonNull View itemView) {
             super(itemView);
+            mItemView = itemView;
         }
     }
 }

@@ -7,6 +7,8 @@ import com.shuai.musicplayer2.api.Api;
 import com.shuai.musicplayer2.control.Comment;
 import com.shuai.musicplayer2.domain.CommentList;
 
+import org.w3c.dom.ls.LSException;
+
 import java.net.HttpURLConnection;
 import java.util.List;
 
@@ -40,6 +42,9 @@ public class GetCommentList {
             public void onFailure(Call<CommentList> call, Throwable t) {
                 Log.i(TAG,"获取失败");
                 Log.i(TAG,t.toString());
+                Message message = Message.obtain();
+                message.what = 600;
+                Comment.mHandler.sendMessage(message);
             }
         });
     }

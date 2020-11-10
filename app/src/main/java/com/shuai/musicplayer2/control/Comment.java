@@ -7,6 +7,7 @@ import android.os.Message;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,9 +29,10 @@ public class Comment extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_comment);
+        initView();
         //加载评论的数据
         new GetCommentList(mId);
-        initView();
     }
 
     private void initView() {
@@ -46,7 +48,11 @@ public class Comment extends AppCompatActivity {
             public void handleMessage(@NonNull Message msg) {
                 if (msg.what==500){
                     pb.setVisibility(View.GONE);
+                    Toast.makeText(Comment.this, "评论加载成功", Toast.LENGTH_SHORT).show();
                     updateComment();
+                }else if(msg.what==600){
+                    pb.setVisibility(View.GONE);
+                    Toast.makeText(Comment.this, "评论加载失败", Toast.LENGTH_SHORT).show();
                 }
             }
         };

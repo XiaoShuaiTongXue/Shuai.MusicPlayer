@@ -4,6 +4,13 @@ import java.util.List;
 
 public class CommentList {
 
+    @Override
+    public String toString() {
+        return "CommentList{" +
+                "hotComments=" + hotComments +
+                '}';
+    }
+
     private java.util.List<HotCommentsBean> hotComments;
 
     public List<HotCommentsBean> getHotComments() {
@@ -15,10 +22,15 @@ public class CommentList {
     }
 
     public static class HotCommentsBean {
-        /**
-         * user : {"locationInfo":null,"liveInfo":null,"anonym":0,"userId":52210431,"avatarDetail":null,"userType":0,"remarkName":null,"vipRights":null,"nickname":"花村村花的男人","avatarUrl":"https://p3.music.126.net/Uo2ExBQZp2uU1K6KaWKUgg==/7797736464366291.jpg","authStatus":0,"expertTags":null,"experts":null,"vipType":0}
-         * content : 杰伦以前的冷门歌曲现在看来简直就是巨大宝藏！
-         */
+        @Override
+        public String toString() {
+            return "HotCommentsBean{" +
+                    "user=" + user +
+                    ", content='" + content + '\'' +
+                    '}';
+        }
+
+
 
         private UserBean user;
         private String content;
@@ -41,22 +53,9 @@ public class CommentList {
     }
 
         public static class UserBean {
-            /**
-             * userId : 52210431
-             * nickname : 花村村花的男人
-             * avatarUrl : https://p3.music.126.net/Uo2ExBQZp2uU1K6KaWKUgg==/7797736464366291.jpg
-             */
-            private int userId;
+
             private String nickname;
             private String avatarUrl;
-
-            public int getUserId() {
-                return userId;
-            }
-
-            public void setUserId(int userId) {
-                this.userId = userId;
-            }
 
             public String getNickname() {
                 return nickname;
