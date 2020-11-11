@@ -106,6 +106,7 @@
         android:layout_weight="1"
         android:layout_marginBottom="40dp">
         <Button
+            android:id="@+id/player_last"
             android:gravity="center"
             android:layout_width="30dp"
             android:layout_height="30dp"
@@ -117,6 +118,7 @@
             android:layout_height="40dp"
             android:background="@drawable/start"/>
         <Button
+            android:id="@+id/player_next"
             android:gravity="center"
             android:layout_alignParentRight="true"
             android:layout_width="30dp"

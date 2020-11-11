@@ -4,6 +4,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.shuai.musicplayer2.interfaces.IPlayerController;
 import com.shuai.musicplayer2.interfaces.IPlayerViewController;

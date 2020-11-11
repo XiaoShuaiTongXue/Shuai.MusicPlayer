@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,10 +19,13 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.shuai.musicplayer2.R;
 import com.shuai.musicplayer2.adapter.TopListAdapter;
+import com.shuai.musicplayer2.utils.DlCRUD;
 import com.shuai.musicplayer2.utils.GetMenuList;
 import com.shuai.musicplayer2.utils.LikeCRUD;
 import com.shuai.musicplayer2.utils.MenuList;
 import com.shuai.musicplayer2.utils.GetTopList;
+
+import java.io.File;
 
 
 public class Main extends AppCompatActivity {
@@ -48,15 +52,16 @@ public class Main extends AppCompatActivity {
         mAdapter = new TopListAdapter();
         mProgressBar = findViewById(R.id.pv_main);
         mProgressBar.setVisibility(View.VISIBLE);
-        mHandler = new Handler(){
+        mHandler = new Handler(new Handler.Callback() {
             @Override
-            public void handleMessage(@NonNull Message msg) {
-                if(msg.what==200){
+            public boolean handleMessage(@NonNull Message msg) {
+                if (msg.what == 200) {
                     initTopList();
                     mProgressBar.setVisibility(View.GONE);
                 }
+                return false;
             }
-        };
+        });
     }
 
     public void like(View view){
@@ -70,12 +75,17 @@ public class Main extends AppCompatActivity {
         }
     }
 
+    public void dlList(View view){
+        startActivity(new Intent(Main.this,Download.class));
+    }
+
     public void search(View view) {
         mKeyWord = mEditText.getText().toString();
         if(mKeyWord ==null|| mKeyWord.equals("")){
             Toast.makeText(this, "请输入搜索关键词", Toast.LENGTH_SHORT).show();
         }
-        new GetMenuList(10).getMusicList(mKeyWord);
+        // TODO: 2020/11/11 实现加载更多后更改这里 
+        new GetMenuList(30).getMusicList(mKeyWord);
         Intent intent = new Intent(Main.this,Result.class);
         intent.putExtra("Tag","搜索：");
         intent.putExtra("keyword",mKeyWord);
@@ -87,7 +97,8 @@ public class Main extends AppCompatActivity {
         mAdapter.setOnTopListClick(new TopListAdapter.OnTopListClickListener() {
             @Override
             public void onTopListClick(String id,String name) {
-                new GetMenuList(10).getTopList(id);
+                // TODO: 2020/11/11 实现加载更多或更改这里 
+                new GetMenuList(30).getTopList(id);
                 Intent intent = new Intent(Main.this,Result.class);
                 intent.putExtra("Tag","模块：");
                 intent.putExtra("keyword",name);

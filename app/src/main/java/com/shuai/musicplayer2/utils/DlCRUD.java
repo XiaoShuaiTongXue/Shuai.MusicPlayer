@@ -1,7 +1,13 @@
 package com.shuai.musicplayer2.utils;
 
+import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.shuai.musicplayer2.control.Main;
+import com.shuai.musicplayer2.control.Player;
 import com.shuai.musicplayer2.domain.MusicListInfo;
 
 import java.io.File;
@@ -9,6 +15,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -18,16 +26,34 @@ import okhttp3.Request;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
-public class DownLoadMusic {
+public class DlCRUD {
 
-    private static final String TAG = "DownLoadMusic";
-    private final String mUrl;
-    private final String mFileName;
+    private static final String TAG = "DlCRUD";
+    private  String mUrl;
+    private  File mFile;
+    public static List<String> sDlList;
 
-    public DownLoadMusic(int position){
+    public void getDL(File parentFile){
+        sDlList = new ArrayList<String>();
+        for(File file : parentFile.listFiles()){
+            if (file != null) {
+                sDlList.add(file.getName());
+            }
+        }
+    }
+
+    public boolean deleteMusic(File file){
+        if (file.exists()){
+            file.delete();
+            return true;
+        }
+        return false;
+    }
+
+    public void downLoadMusic(int position, File file){
         MusicListInfo info = MenuList.sMusicListInfo.get(position);
         mUrl = info.getUrl();
-        mFileName = info.getName();
+        mFile = file;
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(3000, TimeUnit.MILLISECONDS)
                 .build();
@@ -55,9 +81,16 @@ public class DownLoadMusic {
 
     private void downLoad(ResponseBody body) {
         InputStream mInputStream = body.byteStream();
+        Message message = Message.obtain();
         try {
-            // TODO: 2020/11/8 添加外部存储卡的地址
-            File mFile = new File("/data/data/com.shuai.retrofit/images/"+mFileName);
+            if (!mFile.getParentFile().exists()){
+                mFile.getParentFile().mkdirs();
+            }
+            if (mFile.exists()){
+                message.what = 303;
+                Player.sHandler.sendMessage(message);
+                return;
+            }
             Log.i(TAG,mFile.getPath());
             FileOutputStream fos = new FileOutputStream(mFile);
             byte[] buffer = new byte[1024];
@@ -66,11 +99,14 @@ public class DownLoadMusic {
                 fos.write(buffer,0,len);
             }
             fos.close();
-            // TODO: 2020/11/8 将主界面的视图控制器传递过来
-            Log.i(TAG,"下载成功");
+            message.what = 301;
+            Player.sHandler.sendMessage(message);
+
         } catch (Exception e) {
             e.printStackTrace();
             Log.i(TAG,e.toString());
+            message.what = 302;
+            Player.sHandler.sendMessage(message);
         }
     }
 }

@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -17,8 +19,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -26,9 +30,12 @@ import com.shuai.musicplayer2.R;
 import com.shuai.musicplayer2.interfaces.IPlayerController;
 import com.shuai.musicplayer2.interfaces.IPlayerViewController;
 import com.shuai.musicplayer2.service.PlayService;
+import com.shuai.musicplayer2.utils.DlCRUD;
 import com.shuai.musicplayer2.utils.MenuList;
 import com.shuai.musicplayer2.utils.LikeCRUD;
 
+
+import java.io.File;
 
 import static com.shuai.musicplayer2.interfaces.IPlayerController.PLAY_STATE_PAUSE;
 import static com.shuai.musicplayer2.interfaces.IPlayerController.PLAY_STATE_START;
@@ -36,6 +43,8 @@ import static com.shuai.musicplayer2.interfaces.IPlayerController.PLAY_STATE_STO
 
 public class Player extends AppCompatActivity {
 
+    private static final int LAST_MUSIC = -1;
+    private static final int NEXT_MUSIC = 1;
     private static final String TAG = "Player";
     private ImageView mPic;
     private ObjectAnimator mRotation;
@@ -51,11 +60,18 @@ public class Player extends AppCompatActivity {
     private Button mLike;
     private Button mDownload;
     private Button mComment;
+    public static Handler sHandler;
+    private Button mLast;
+    private Button mNext;
+    private Button mMv;
+    private int mMenuSize;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acitivity_player);
+        //初始化数据
+        initData();
         //初始化界面
         initView();
         //初始化控件的点击事件
@@ -64,21 +80,25 @@ public class Player extends AppCompatActivity {
         initBindService();
     }
 
-    /**
-     * 根据数据设置初始界面
-     */
-    private void initView() {
+    private void initData() {
         /**
          * 判断与上一首歌是否相同
          */
         Intent intent = getIntent();
         int newPosition = intent.getIntExtra("position",-1);
         String newMusicId = MenuList.sMusicListInfo.get(newPosition).getId();
+        mMenuSize = MenuList.sMusicListInfo.size();
         if (mMusicId!=null&&mMusicId.equals(newMusicId)){
             isLike = true;
         }
         mPosition = newPosition;
-        mMusicId = newMusicId;
+    }
+
+    /**
+     * 根据数据设置初始界面
+     */
+    private void initView() {
+        mMusicId = MenuList.sMusicListInfo.get(mPosition).getId();;
         mMusicInfo = MenuList.sMusicListInfo.get(mPosition);
         ((TextView)findViewById(R.id.player_title)).setText(mMusicInfo.getName());
         ((TextView)findViewById(R.id.player_alis)).setText(mMusicInfo.getAlia());
@@ -86,13 +106,35 @@ public class Player extends AppCompatActivity {
         mLike = findViewById(R.id.player_like);
         mDownload = findViewById(R.id.player_download);
         mComment = findViewById(R.id.player_comment);
-        Button mv = findViewById(R.id.player_mv);
+        mLast = findViewById(R.id.player_last);
+        mNext = findViewById(R.id.player_next);
+        mMv = findViewById(R.id.player_mv);
         if (mMusicInfo.getMvid()==0){
-            mv.setVisibility(View.GONE);
+            mMv.setVisibility(View.GONE);
         }
         mPic = findViewById(R.id.player_pic);
         //设置背景图片
         Glide.with(mPic.getContext()).load(mMusicInfo.getPicUrl()).into(mPic);
+        //设置下载的接收器，当接收到数据后会通知前台
+        sHandler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                String showInfo = "";
+                if(msg.what == 301){
+                    showInfo = "下载成功";
+                }else if(msg.what == 302){
+                    showInfo="下载失败";
+                }else if(msg.what == 303){
+                    showInfo = "下载列表中已经存在";
+                }
+                Toast.makeText(Player.this, showInfo, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+        if (mRotation != null) {
+            mRotation.start();
+            return;
+        }
         //设置旋转动画
         mRotation = ObjectAnimator
                 .ofFloat(mPic, "rotation", 0,360)
@@ -152,9 +194,13 @@ public class Player extends AppCompatActivity {
 
         //添加下载按钮的点击事件
         mDownload.setOnClickListener(new View.OnClickListener() {
+            // TODO: 2020/11/10 外部存储器的读取 
             @Override
             public void onClick(View v) {
-
+                File path = getFilesDir();
+                File file = new File(path,"/music/"+mMusicInfo.getName()+".mp3");
+                Toast.makeText(Player.this, "开始下载", Toast.LENGTH_SHORT).show();
+                new DlCRUD().downLoadMusic(mPosition,file);
             }
         });
 
@@ -168,6 +214,49 @@ public class Player extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        //播放音乐mv
+        mMv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(Player.this, "MV播放功能暂未实现，程序员小哥哥正在抓紧实现中", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //上一首音乐按钮实现
+        mLast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeMusic(LAST_MUSIC);
+            }
+        });
+
+        //下一首音乐实现
+        mNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeMusic(NEXT_MUSIC);
+            }
+        });
+    }
+
+    /**
+     * 切换音乐
+     * @param mode切换类型（上一首（mode=-1）/下一首（model=1））
+     */
+    public void changeMusic(int mode){
+        int newPosition;
+        int i = mode;
+        do {
+            if (i!=mode){
+                Toast.makeText(this, "已经为您自动跳过付费歌曲", Toast.LENGTH_SHORT).show();
+            }
+            newPosition = (mPosition+mode+mMenuSize)%mMenuSize;
+            i = i+mode;
+        }while (MenuList.sMusicListInfo.get(newPosition).getUrl()==null);
+        mPosition = newPosition;
+        initView();
+        startPlay();
     }
 
     /**
@@ -229,11 +318,15 @@ public class Player extends AppCompatActivity {
 
         @Override
         public void onSeekChange(int seek) {
+
             /**
              * 设置进度条的进度
              */
             if (mSeek != null&&isTouch==false) {
                 mSeek.setProgress(seek);
+                if(seek == 100){
+                    mController.seekTo(0);
+                }
             }
         }
     };

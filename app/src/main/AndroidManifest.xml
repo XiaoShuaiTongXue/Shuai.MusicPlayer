@@ -25,6 +25,7 @@
         <activity android:name=".control.Player"/>
         <activity android:name=".control.Result"/>
         <activity android:name=".control.Comment"/>
+        <activity android:name=".control.Download"/>
     </application>
 
 </manifest>

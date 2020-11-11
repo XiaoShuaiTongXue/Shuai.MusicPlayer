@@ -59,6 +59,7 @@
                 <Button
                     android:layout_centerHorizontal="true"
                     android:id="@+id/main_download"
+                    android:onClick="dlList"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@drawable/download2"/>

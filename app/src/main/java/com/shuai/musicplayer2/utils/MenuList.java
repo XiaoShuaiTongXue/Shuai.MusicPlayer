@@ -43,7 +43,7 @@ public class MenuList {
         mRetrofit = RetrofitManager.getRetrofit();
         mApi = mRetrofit.create(Api.class);
         mSongsId = songsId;
-        sCount = count;
+        sCount = count>mSongsId.size()?mSongsId.size():count;
         //根据id数组，更新数组对应id的详细信息
         updateInfo();
     }

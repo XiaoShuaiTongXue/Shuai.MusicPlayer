@@ -49,9 +49,9 @@ public class Result extends AppCompatActivity {
         mTag = intent.getStringExtra("Tag");
         String info = mTag +intent.getStringExtra("keyword");
         mInfo.setText(info);
-        mHandler = new Handler(){
+        mHandler = new Handler(new Handler.Callback() {
             @Override
-            public void handleMessage(@NonNull Message msg) {
+            public boolean handleMessage(@NonNull Message msg) {
                 if (msg.what==100){
                     /**
                      * Result数据加载完毕，开始更新UI
@@ -61,8 +61,9 @@ public class Result extends AppCompatActivity {
                     update();
                     initListener();
                 }
+                return true;
             }
-        };
+        });
     }
 
     //实现点击的接口
