@@ -69,6 +69,11 @@ public class TopListAdapter extends RecyclerView.Adapter<TopListAdapter.InnerHol
         void onTopListClick(String id,String name);
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     /**
      * 设置数据
      */

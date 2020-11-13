@@ -14,13 +14,16 @@
         android:roundIcon="@drawable/music"
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicPlayer2">
-        <activity android:name=".control.Main">
+        <activity android:name=".control.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".control.Retrieve"/>
+        <activity android:name=".control.Register"/>
+        <activity android:name=".control.Main"/>
         <service android:name=".service.PlayService"/>
         <activity android:name=".control.Player"/>
         <activity android:name=".control.Result"/>

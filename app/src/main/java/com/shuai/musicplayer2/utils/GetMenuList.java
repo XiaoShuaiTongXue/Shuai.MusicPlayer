@@ -31,8 +31,7 @@ public class GetMenuList {
      * @param count 菜单音乐的个数
      */
     public GetMenuList(int count){
-        // TODO: 2020/11/11 解决recycle view的显示问题后 scount = count 
-        sCount = 10;
+        sCount = count;
         mRetrofit = RetrofitManager.getRetrofit();
         mApi = mRetrofit.create(Api.class);
     }

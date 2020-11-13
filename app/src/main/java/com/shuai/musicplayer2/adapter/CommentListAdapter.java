@@ -54,6 +54,12 @@ public class CommentListAdapter extends RecyclerView.Adapter<CommentListAdapter.
     }
 
     @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+
+    @Override
     public int getItemCount() {
         return mClList.size();
     }

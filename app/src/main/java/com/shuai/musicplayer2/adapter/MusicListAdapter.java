@@ -61,6 +61,11 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.Inne
         holder.setPosition(position);
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
 
     //设置点击事件
 

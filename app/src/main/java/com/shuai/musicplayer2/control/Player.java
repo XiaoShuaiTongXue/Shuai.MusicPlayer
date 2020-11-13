@@ -242,9 +242,10 @@ public class Player extends AppCompatActivity {
 
     /**
      * 切换音乐
-     * @param mode切换类型（上一首（mode=-1）/下一首（model=1））
+     * @param mode 切换类型（上一首（mode=-1）/下一首（model=1））
      */
     public void changeMusic(int mode){
+        isLike = false;
         int newPosition;
         int i = mode;
         do {
